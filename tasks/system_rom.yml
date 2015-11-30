@@ -1,0 +1,21 @@
+---
+ - name: Identifying System Rom device
+   shell: hp-conrep -s | grep -i family | awk '{print $NF}' | tr A-Z a-z 
+   register: systemrom 
+
+ - name: Installing firmware RPM for System ROM 
+   yum: name=hp-firmware-system-{{ systemrom.stdout }} state=latest
+
+ - name: Firmware path lookup 
+   shell: rpm -ql hp-firmware-system-"{{ systemrom.stdout }}" | grep '\.scexe'
+   register: FirmwarePath
+
+# - name: Installing Firmware
+#   shell: expect -c "set timeout 10;spawn "{{ FirmwarePath.stdout }}"; expect "Continue";send "Y\r"; "
+#   register: demo
+
+ - debug: var=FirmwarePath.stdout
+
+ #- name: ILO firmware Cleanup 
+ #  yum: name=hp-firmware-{{ ILO.stdout }} state=absent
+ 

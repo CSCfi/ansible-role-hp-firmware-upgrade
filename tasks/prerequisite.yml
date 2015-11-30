@@ -1,0 +1,14 @@
+---
+- name: Installing hp-scripting-tools package
+  yum: name=hp-scripting-tools state=present
+
+- name: Installing hpacucli package
+  yum: name=hpacucli state=present
+  when: ansible_distribution_major_version == '6'
+
+- name: Installing hpssacli package
+  yum: name=hpssacli state=present
+  when: ansible_distribution_major_version == '7'
+
+- name: Installing hp-scripting-tools package
+  yum: name=expect state=present

@@ -1,0 +1,28 @@
+---
+ - name: Identifying ILO device
+   shell: lspci -v | grep -i ilo -m 1 | awk '{print $NF}' | tr A-Z a-z
+   register: ILO
+
+# - name: Installing firmware RPM for ILO
+#   yum: name=hp-firmware-{{ ILO.stdout }} state=latest
+
+ - name: Firmware path lookup 
+   shell: rpm -ql hp-firmware-"{{ ILO.stdout }}" | grep '\.scexe'
+   register: FirmwarePath
+
+ - name: Clearing Log file
+   shell: "> /var/cpq/Component.log"
+
+ - name: Installing ILO firmware
+   script: ../files/ilo.sh --some-arguments "{{ FirmwarePath.stdout }}"
+   ignore_errors: true
+
+ - name: Displaying Firmware installation logs
+   shell: "cat /var/cpq/Component.log"
+   register: InstallLog
+
+ - debug: var=InstallLog.stdout_lines
+
+# - name: ILO firmware Cleanup 
+#   yum: name=hp-firmware-{{ ILO.stdout }} state=absent
+ 

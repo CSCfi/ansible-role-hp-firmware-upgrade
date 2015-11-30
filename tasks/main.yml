@@ -1,2 +1,6 @@
 ---
-# tasks file for ansible-role-hp-firmware-upgrade
+
+#- include: prerequisite.yml 
+- include: ilo.yml
+#- include: system_rom.yml 
+#- include: install_firmware_RPM.yml
