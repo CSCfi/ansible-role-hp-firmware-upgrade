@@ -1,12 +1,22 @@
-Role Name
+ansible-role-hp-firmware-upgrade
 =========
 
-A brief description of the role goes here.
+Ansible role to upgrade HP system firmwares. List of components upgraded by this role are
+
+* ILO
+* System ROM
+* Power Management Controller
+* Smart Array disk controller
+* Disk Drive
+* Intel Network Adapter
+* Mellanox Network Adapter
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+The machine where firmware upgrade is taking place should have the following
+
+1# 
 
 Role Variables
 --------------
