@@ -1,6 +1,20 @@
 ---
 
-#- include: prerequisite.yml 
+- include: prerequisite.yml 
+  tags:
+    - ilo
+    - system-rom
+    - power-management-controller
+
 - include: ilo.yml
-#- include: system_rom.yml 
-#- include: install_firmware_RPM.yml
+  tags:
+    - ilo
+
+- include: system_rom.yml 
+  tags:
+   - system-rom
+
+- include: power_management_controller.yml 
+  tags:
+   - power-management-controller 
+

@@ -1,0 +1,24 @@
+---
+ - name: Installing Firmware RPM
+   yum: name=hp-firmware-system-{{ device.stdout }} state=latest
+
+ - name: Firmware path lookup
+   shell: rpm -ql hp-firmware-system-"{{ device.stdout }}" | grep '\.scexe'
+   register: FirmwarePath
+
+ - name: Clearing previous log entries
+   shell: "> /var/cpq/Component.log"
+   ignore_errors: true
+
+ - name: Installing Firmware
+   script: ../files/firmware_installer.sh --some-arguments "{{ FirmwarePath.stdout }}"
+   ignore_errors: true
+
+ - name: Displaying Firmware installation logs
+   shell: "cat /var/cpq/Component.log"
+   register: InstallLog
+
+ - debug: var=InstallLog.stdout_lines
+
+ - name: Cleanup
+   yum: name=hp-firmware-{{ device.stdout }} state=absent
