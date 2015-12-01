@@ -12,3 +12,5 @@
 
 - name: Installing hp-scripting-tools package
   yum: name=expect state=present
+
+#pexpect
