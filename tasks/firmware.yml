@@ -5,6 +5,7 @@
  - name: Firmware path lookup
    shell: rpm -ql hp-firmware-system-"{{ device.stdout }}" | grep '\.scexe'
    register: FirmwarePath
+   changed_when: False
 
  - name: Clearing previous log entries
    shell: "> /var/cpq/Component.log"

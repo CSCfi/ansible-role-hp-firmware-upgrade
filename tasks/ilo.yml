@@ -2,6 +2,7 @@
  - name: Identifying ILO device
    shell: lspci -v | grep -i ilo -m 1 | awk '{print $NF}' | tr A-Z a-z
    register: device 
+   changed_when: False
 
  - name: Installing firmware RPM
    yum: name=hp-firmware-{{ device.stdout }} state=latest
@@ -9,15 +10,24 @@
  - name: Firmware path lookup 
    shell: rpm -ql hp-firmware-"{{ device.stdout }}" | grep '\.scexe'
    register: FirmwarePath
+   changed_when: False
 
  - name: Clearing previous log entries 
    shell: "> /var/cpq/Component.log"
    ignore_errors: true
 
- - expect:
-     command: sh "{{ FirmwarePath.stdout }}" 
+
+ - name: Install pexpect for automating firmware install
+   yum: name={{ item }}
+   with_items:
+     - python34
+     - python-ptyprocess
+
+ - name: Install firmware
+   expect:
+     command: "{{ FirmwarePath.stdout }}" 
      responses:
-       "Continue (y/N)": 'y'
+       'Continue (y/N)': 'y'
 
 # - name: Installing ILO firmware
 #   script: ../files/firmware_installer.sh --some-arguments "{{ FirmwarePath.stdout }}"
