@@ -48,5 +48,6 @@
  - name: Displaying Firmware installation logs
    shell: "cat /var/cpq/Component.log"
    register: InstallLog
+   changed_when: False
 
  - debug: var=InstallLog.stdout_lines
