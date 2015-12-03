@@ -1,6 +1,8 @@
 ---
 # vim:ft=ansible:
 
+ - assert: { that: "ansible_system_vendor == 'HP'" }
+
    # We look for:
    # 01:00.0 "System peripheral" "Hewlett-Packard Company" "Integrated Lights-Out Standard Slave Instrumentation & System Support" -r05 "Hewlett-Packard Company" "iLO4"
  - name: Check there is an ilo
@@ -13,6 +15,8 @@
    # element of the resulting array. "|lower" is a Jinja2 filter
  - name: Store ilo version
    set_fact: ilo_version={{ ilo_info.stdout.split('\"')[-2] |lower}}
+
+ - assert: { that: ilo_version | match("ilo4") }
 
  - name: Installing firmware RPM
    yum: name=hp-firmware-{{ ilo_version }} state=latest
@@ -45,7 +49,7 @@
      command: "{{ firmware_installer }}" 
      responses:
        'Continue (y/N)': 'y'
-   failed_when: 
+   failed_when: false
 
 # - name: Installing ILO firmware
 #   script: ../files/firmware_installer.sh --some-arguments "{{ FirmwarePath.stdout }}"
