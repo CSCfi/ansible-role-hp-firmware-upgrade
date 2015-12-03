@@ -36,6 +36,7 @@
  - name: Installing firmware
    expect:
      command: "{{ firmware_installer }}" 
+     timeout: 600
      responses:
 #       'Continue (y/N)': 'y'
        "Continue (y/N)?": "y"
