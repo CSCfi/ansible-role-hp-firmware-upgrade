@@ -38,20 +38,15 @@
      command: "{{ firmware_installer }}" 
      timeout: 600
      responses:
-#       'Continue (y/N)': 'y'
        "Continue (y/N)?": "y"
-   failed_when: false
+   register: upgrade_results
+   changed_when: upgrade_results.rc == 0
+   failed_when: upgrade_results.rc != 2
 
-# - name: Installing ILO firmware
-#   script: ../files/firmware_installer.sh --some-arguments "{{ FirmwarePath.stdout }}"
-#   ignore_errors: true
+ - debug: var=upgrade_results
 
  - name: Displaying Firmware installation logs
    shell: "cat /var/cpq/Component.log"
    register: InstallLog
 
  - debug: var=InstallLog.stdout_lines
-
- - name: ILO firmware Cleanup 
-   yum: name=hp-firmware-{{ ilo_version }} state=absent
- 
