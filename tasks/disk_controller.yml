@@ -1,0 +1,40 @@
+---
+- assert: { that: "ansible_system_vendor == 'HP'" }
+
+- modprobe: name=sg state=present
+
+- name: Identifying firmware RPM for disk controller device
+  shell: yum search `hpssacli ctrl all show config | grep -i smart -m 1| awk '{print $3}'` | grep -i `uname -m` | awk '{print $1}'
+  register: disk_controller_rpm 
+
+- name: Installing firmware RPM for disk controller
+  yum: name={{ disk_controller_rpm.stdout }} state=latest
+
+- name: Firmware path lookup
+  shell: rpm -ql "{{ disk_controller_rpm.stdout }}" | grep '\.scexe'
+  register: FirmwarePath
+
+- name: Clearing previous log entries
+  shell: "> /var/cpq/Component.log"
+  ignore_errors: true
+  changed_when: false
+
+- name: Install firmware
+  expect:
+    command: "{{ FirmwarePath.stdout }}"
+    timeout: 1200 
+    responses:
+      "Do you want to run device discovery": "y"
+      "Do you want to upgrade the device that has older ROM": "y"
+  ignore_errors: true
+
+- name: Displaying Firmware installation logs
+  shell: "cat /var/cpq/Component.log"
+  register: InstallLog
+  changed_when: false
+
+- debug: var=InstallLog.stdout_lines
+
+- name: Disk controller firmware Cleanup
+  yum: name={{ disk_controller_rpm.stdout }} state=absent
+
