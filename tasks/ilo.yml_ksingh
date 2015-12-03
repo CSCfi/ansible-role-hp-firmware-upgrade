@@ -1,26 +1,62 @@
 ---
- - name: Identifying ILO device
-   shell: lspci -v | grep -i ilo -m 1 | awk '{print $NF}' | tr A-Z a-z
-   register: device 
+# vim:ft=ansible:
+
+ - assert: { that: "ansible_system_vendor == 'HP'" }
+
+   # We look for:
+   # 01:00.0 "System peripheral" "Hewlett-Packard Company" "Integrated Lights-Out Standard Slave Instrumentation & System Support" -r05 "Hewlett-Packard Company" "iLO4"
+ - name: Check there is an ilo
+   command: lspci -s 01:00.0 -m
+   register: ilo_info
    changed_when: False
+
+   # We need to get the "iLO4" from the above into a varible
+   # using the python split fuction on the '"' character and the 2nd from last
+   # element of the resulting array. "|lower" is a Jinja2 filter
+ - name: Store ilo version
+   set_fact: ilo_version={{ ilo_info.stdout.split('\"')[-2] |lower}}
+
+ - assert: { that: ilo_version | match("ilo4") }
 
  - name: Installing firmware RPM
-   yum: name=hp-firmware-{{ device.stdout }} state=latest
+   yum: name=hp-firmware-{{ ilo_version }} state=latest
 
  - name: Firmware path lookup 
-   shell: rpm -ql hp-firmware-"{{ device.stdout }}" | grep '\.scexe'
-   register: FirmwarePath
+   command: rpm -q hp-firmware-"{{ ilo_version }}"
+   register: FirmwarePackage
    changed_when: False
+
+ - name: Store path to hpsetup installer
+   set_fact: firmware_installer="/usr/lib/i386-linux-gnu/{{ FirmwarePackage.stdout | splitext | first }}/hpsetup"
 
  - name: Clearing previous log entries 
    shell: "> /var/cpq/Component.log"
    ignore_errors: true
 
+<<<<<<< HEAD:tasks/ilo.yml
+ - name: Install pexpect dependancies
+   yum: name={{ item }}
+   with_items:
+     - python34
+     - python-ptyprocess
+     - python-pip
+
+ - name: Install pexpect
+   pip: name=pexpect
+   ignore_errors: true
+
+=======
+>>>>>>> master:tasks/ilo.yml_ksingh
  - name: Install firmware
    expect:
-     command: "{{ FirmwarePath.stdout }}" 
+     command: "{{ firmware_installer }}" 
      responses:
+<<<<<<< HEAD:tasks/ilo.yml
+       'Continue (y/N)': 'y'
+   failed_when: false
+=======
        "Continue (y/N)?": "y"
+>>>>>>> master:tasks/ilo.yml_ksingh
 
 # - name: Installing ILO firmware
 #   script: ../files/firmware_installer.sh --some-arguments "{{ FirmwarePath.stdout }}"
