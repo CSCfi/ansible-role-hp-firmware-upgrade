@@ -17,8 +17,10 @@
  - name: Install firmware
    expect:
      command: "{{ FirmwarePath.stdout }}"
+     timeout: 600
      responses:
-       'Do you want to upgrade the software to a newer version (y/n) ?': 'y'
+       'Do you want to upgrade the software to a newer version.*': 'y'
+       'Do you want to reboot your system now.*': 'n'
 
 # - name: Installing System ROM firmware
 #   script: ../files/firmware_installer.sh --some-arguments "{{ FirmwarePath.stdout }}"
