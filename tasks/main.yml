@@ -4,7 +4,6 @@
   tags:
     - ilo
     - system-rom
-    - power-management-controller
 
 - include: ilo.yml
   tags:
@@ -13,8 +12,4 @@
 - include: system_rom.yml 
   tags:
    - system-rom
-
-- include: power_management_controller.yml 
-  tags:
-   - power-management-controller 
 
