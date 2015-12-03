@@ -33,6 +33,7 @@
    shell: "> /var/cpq/Component.log"
    ignore_errors: true
 
+<<<<<<< HEAD:tasks/ilo.yml
  - name: Install pexpect dependancies
    yum: name={{ item }}
    with_items:
@@ -44,12 +45,18 @@
    pip: name=pexpect
    ignore_errors: true
 
+=======
+>>>>>>> master:tasks/ilo.yml_ksingh
  - name: Install firmware
    expect:
      command: "{{ firmware_installer }}" 
      responses:
+<<<<<<< HEAD:tasks/ilo.yml
        'Continue (y/N)': 'y'
    failed_when: false
+=======
+       "Continue (y/N)?": "y"
+>>>>>>> master:tasks/ilo.yml_ksingh
 
 # - name: Installing ILO firmware
 #   script: ../files/firmware_installer.sh --some-arguments "{{ FirmwarePath.stdout }}"
