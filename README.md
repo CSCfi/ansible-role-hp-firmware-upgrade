@@ -14,6 +14,8 @@ Ansible role to upgrade HP system firmwares. List of components upgraded by this
 Requirements
 ------------
 
+The machine were ansible runs needs to have ansible 2.0
+
 The machine where firmware upgrade is taking place should have the following
 
 1# 
