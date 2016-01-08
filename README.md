@@ -18,7 +18,8 @@ The machine were ansible runs needs to have ansible 2.0
 
 The machine where firmware upgrade is taking place should have the following
 
-1# 
+* hp-conrep
+ * Available in the HP Scripting Toolkit
 
 Role Variables
 --------------
