@@ -1,2 +1,7 @@
 ---
 # defaults file for ansible-role-hp-firmware-upgrade
+
+hp_firmare_update_ilo: False
+hp_firmare_update_system_rom: False
+hp_firmare_update_disk_controller: False
+

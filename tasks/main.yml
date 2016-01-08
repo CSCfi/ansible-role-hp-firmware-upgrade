@@ -9,12 +9,15 @@
 - include: ilo.yml
   tags:
     - ilo
+  when: hp_firmare_update_ilo
 
 - include: system_rom.yml 
   tags:
    - system-rom
+  when: hp_firmare_update_system_rom
 
 - include: disk_controller.yml
   tags:
    - disk-controller 
+  when: hp_firmare_update_disk_controller
 
