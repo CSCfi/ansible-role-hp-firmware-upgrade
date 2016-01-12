@@ -5,6 +5,7 @@
     - ilo
     - system-rom
     - disk-controller
+    - disk-drive
 
 - include: ilo.yml
   tags:
@@ -17,4 +18,8 @@
 - include: disk_controller.yml
   tags:
    - disk-controller 
+
+- include: disk_drive.yml
+  tags:
+   - disk-drive
 
