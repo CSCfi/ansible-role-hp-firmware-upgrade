@@ -1,0 +1,16 @@
+---
+- name: Clearing previous log entries
+  shell: "> /var/cpq/Component.log"
+  ignore_errors: true
+  changed_when: false
+
+- name: Installing firmware in silent mode
+  command: "{{ firmware_installer }} -f -s "
+  ignore_errors: true
+
+- name: Displaying Firmware installation logs
+  shell: "cat /var/cpq/Component.log"
+  register: InstallLog
+  changed_when: false
+
+- debug: var=InstallLog.stdout_lines

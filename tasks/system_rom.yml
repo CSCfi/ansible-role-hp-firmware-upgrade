@@ -7,29 +7,15 @@
    yum: name=hp-firmware-system-{{ systemrom.stdout }} state=latest
 
  - name: Firmware path lookup
-   shell: rpm -ql hp-firmware-system-"{{ systemrom.stdout }}" | grep '\.scexe'
-   register: FirmwarePath
+   command: rpm -q hp-firmware-system-"{{ systemrom.stdout }}" 
+   register: FirmwarePackage
+   changed_when: False
 
- - name: Clearing previous log entries
-   shell: "> /var/cpq/Component.log"
-   ignore_errors: true
-   changed_when: false
+ - name: Store path to hpsetup installer
+   set_fact: firmware_installer="/usr/lib/i386-linux-gnu/{{ FirmwarePackage.stdout | splitext | first }}/hpsetup"
 
- - name: Install firmware
-   expect:
-     command: "{{ FirmwarePath.stdout }}"
-     timeout: 1200 
-     responses:
-       "Do you want to upgrade the software to a newer version.*": "y"
-       "Do you want to reboot your system now.*": "n"
-
- - name: Displaying Firmware installation logs
-   shell: "cat /var/cpq/Component.log"
-   register: InstallLog
-   changed_when: false
-
- - debug: var=InstallLog.stdout_lines
+ - include: firmware_installer.yml
 
  - name: System ROM firmware Cleanup
-   yum: name=hp-firmware-{{ systemrom.stdout }} state=absent
+   yum: name=hp-firmware-system-{{ systemrom.stdout }} state=absent
 
