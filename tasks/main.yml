@@ -6,6 +6,7 @@
     - system-rom
     - disk-controller
     - disk-drive
+    - power-management-controller
 
 - include: ilo.yml
   tags:
@@ -22,4 +23,8 @@
 - include: disk_drive.yml
   tags:
    - disk-drive
+
+- include: power_management_controller.yml 
+  tags:
+   - power-management-controller 
 
