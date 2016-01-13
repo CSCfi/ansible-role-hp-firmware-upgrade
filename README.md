@@ -25,10 +25,15 @@ Role Variables
 By default this role upgrades firmwares for all the devices mentioned above.
 You can customize your selection by editing defaults/main.yml
 
+Installation
+------------
+
+```$ ansible-galaxy install ksingh7.hp-firmware-upgrade```
+
 Dependencies
 ------------
 
-The role ksingh7.ansible-role-hp-firmware-upgrade must be installed.
+The role ```ksingh7.hp-firmware-upgrade``` must be installed.
 
 Example Playbook
 ----------------
@@ -37,7 +42,7 @@ Example Playbook
 ```
 - hosts: servers
   roles:
-     - { role: ksingh7.ansible-role-hp-firmware-upgrade }
+     - { role: ksingh7.hp-firmware-upgrade }
 ```
 License
 -------
