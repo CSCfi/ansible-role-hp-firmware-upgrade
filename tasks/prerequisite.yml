@@ -1,12 +1,12 @@
 ---
-#- name: Installing required packages
-#  yum: name={{ item }} state=latest
-#  with_items:
+- name: Installing required packages
+  yum: name={{ item }} state=latest
+  with_items:
 #    - python34
 #    - python-ptyprocess
 #    - python-pip
 #    - expect
-#    - hp-scripting-tools
+    - hp-scripting-tools
  
 - name: Installing hpacucli package
   yum: name=hpacucli state=present
