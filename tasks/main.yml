@@ -7,6 +7,7 @@
     - disk-controller
     - disk-drive
     - power-management-controller
+    - intel-network-controller
 
 - include: ilo.yml
   tags:
@@ -27,4 +28,8 @@
 - include: power_management_controller.yml 
   tags:
    - power-management-controller 
+
+- include: intel_network_controller.yml
+  tags:
+   - intel-network-controller
 
