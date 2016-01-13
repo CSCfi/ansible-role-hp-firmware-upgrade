@@ -34,11 +34,11 @@ Example Playbook
 ----------------
 
 * You can simply use this role like
-
-    - hosts: servers
-      roles:
-         - { role: ksingh7.ansible-role-hp-firmware-upgrade }
-
+```
+- hosts: servers
+  roles:
+     - { role: ksingh7.ansible-role-hp-firmware-upgrade }
+```
 License
 -------
 
