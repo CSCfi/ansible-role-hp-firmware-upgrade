@@ -1,5 +1,4 @@
 ---
-
 - include: prerequisite.yml 
   tags:
     - ilo
@@ -13,31 +12,35 @@
 - include: ilo.yml
   tags:
     - ilo
-  when: hp_firmare_update_ilo
+  when: upgrade_ilo_firmware
 
 - include: system_rom.yml 
   tags:
    - system-rom
-  when: hp_firmare_update_system_rom
+  when: upgrade_system_rom_firmware
 
 - include: disk_controller.yml
   tags:
    - disk-controller 
-  when: hp_firmare_update_disk_controller
+  when: upgrade_disk_controller_firmware
 
 - include: disk_drive.yml
   tags:
    - disk-drive
+  when: upgrade_disk_drive_firmware
 
 - include: power_management_controller.yml 
   tags:
    - power-management-controller 
+  when: upgrade_power_management_controller_firmware
 
 - include: intel_network_adapter.yml
   tags:
    - intel-network-adapter
+  when: upgrade_intel_network_adapter_firmware
 
 - include: mellanox_network_adapter.yml
   tags:
    - mellanox-network-adapter
+  when: upgrade_mellanox_network_adapter_firmware
 
