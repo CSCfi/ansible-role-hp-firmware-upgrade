@@ -47,4 +47,4 @@ MIT
 Author Information
 ------------------
 
-This role was created by [Karan Singh](www.ksingh.co.in)
+This role was created by [Karan Singh](http://www.ksingh.co.in)
