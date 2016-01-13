@@ -5,6 +5,10 @@
     - ilo
     - system-rom
     - disk-controller
+    - disk-drive
+    - power-management-controller
+    - intel-network-adapter
+    - mellanox-network-adapter
 
 - include: ilo.yml
   tags:
@@ -20,4 +24,20 @@
   tags:
    - disk-controller 
   when: hp_firmare_update_disk_controller
+
+- include: disk_drive.yml
+  tags:
+   - disk-drive
+
+- include: power_management_controller.yml 
+  tags:
+   - power-management-controller 
+
+- include: intel_network_adapter.yml
+  tags:
+   - intel-network-adapter
+
+- include: mellanox_network_adapter.yml
+  tags:
+   - mellanox-network-adapter
 

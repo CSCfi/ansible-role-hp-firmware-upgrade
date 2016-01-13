@@ -1,0 +1,24 @@
+---
+- assert: { that: "ansible_system_vendor == 'HP'" }
+
+- name: Identifying firmware RPM for Power Mangement Controller
+  shell: yum search `hp-conrep -s | grep  "System Type" | awk '{print $NF}' | tr A-Z a-z` | grep -i hp-firmware-powerpic | awk '{print $1}'
+  register: power_management_controller_rpm 
+  changed_when: false
+
+- name: Installing firmware RPM for Power Mangement Controller
+  yum: name={{ power_management_controller_rpm.stdout }} state=latest
+
+- name: Firmware path lookup
+  shell: rpm -ql "{{ power_management_controller_rpm.stdout }}" | grep '/hpsetup'
+  register: FirmwarePackage 
+  changed_when: false
+
+- name: Store path to hpsetup installer
+  set_fact: firmware_installer="{{ FirmwarePackage.stdout }}"
+
+- include: firmware_installer.yml
+
+- name: Power Management Controller firmware Cleanup
+  yum: name={{ power_management_controller_rpm.stdout }} state=absent
+

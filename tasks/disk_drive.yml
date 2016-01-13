@@ -1,0 +1,24 @@
+---
+- assert: { that: "ansible_system_vendor == 'HP'" }
+
+- name: Identifying firmware RPM for disk drives 
+  shell: "yum search `hpssacli ctrl all show config detail | grep Model: | grep HP -m1 | awk '{print $NF}'` | grep -i hp-firmware | awk '{print $1}' | grep `uname  -m`"
+  register: disk_drive_rpm 
+  changed_when: false
+
+- name: Installing firmware RPM for disk drive
+  yum: name={{ disk_drive_rpm.stdout }} state=latest
+
+- name: Firmware path lookup
+  shell: rpm -ql "{{ disk_drive_rpm.stdout }}" | grep '/hpsetup'
+  register: FirmwarePackage 
+  changed_when: false
+
+- name: Store path to hpsetup installer
+  set_fact: firmware_installer="{{ FirmwarePackage.stdout }}"
+
+- include: firmware_installer.yml
+
+- name: Disk drive firmware Cleanup
+  yum: name={{ disk_drive_rpm.stdout }} state=absent
+
