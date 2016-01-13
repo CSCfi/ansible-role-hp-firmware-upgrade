@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  author: your name
+  author: Karan Singh 
   description: This repository automates HP firmware upgradation process using ansible 
   company: CSC - IT Center for Science Ltd.
   # Some suggested licenses:
