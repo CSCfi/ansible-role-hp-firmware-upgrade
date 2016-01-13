@@ -7,7 +7,8 @@
     - disk-controller
     - disk-drive
     - power-management-controller
-    - intel-network-controller
+    - intel-network-adapter
+    - mellanox-network-adapter
 
 - include: ilo.yml
   tags:
@@ -29,7 +30,11 @@
   tags:
    - power-management-controller 
 
-- include: intel_network_controller.yml
+- include: intel_network_adapter.yml
   tags:
-   - intel-network-controller
+   - intel-network-adapter
+
+- include: mellanox_network_adapter.yml
+  tags:
+   - mellanox-network-adapter
 
