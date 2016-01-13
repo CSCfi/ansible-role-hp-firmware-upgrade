@@ -23,7 +23,7 @@ Requirements
 Role Variables
 --------------
 By default this role upgrades firmwares for all the devices mentioned above.
-You can customize your selection by editing defaults/main.yml
+You can customize your selection by editing ```defaults/main.yml```
 
 Installation
 ------------
