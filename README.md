@@ -9,17 +9,16 @@ Ansible role to upgrade HP system firmwares. List of components upgraded by this
 * Smart Array disk controller
 * Disk Drive
 * Intel Network Adapter
-* Mellanox Network Adapter
+* Mellanox Infiniband-ethernet Adapter (VPI)
 
 Requirements
 ------------
 
-The machine were ansible runs needs to have ansible 2.0
-
-The machine where firmware upgrade is taking place should have the following
-
-* hp-conrep
- * Available in the HP Scripting Toolkit
+* The machine were ansible runs needs to have ansible 2.0
+* The machine where firmware upgrade is taking place should have the following
+    * Package: hp-conrep
+    * Package: hpssacli for RHEL7 hosts or hpacucli for RHEL6 hosts
+    * Package: hp-scripting-tools
 
 Role Variables
 --------------
