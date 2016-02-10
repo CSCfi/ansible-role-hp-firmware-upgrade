@@ -14,11 +14,8 @@ Ansible role to upgrade HP system firmwares. List of components upgraded by this
 Requirements
 ------------
 
-* The machine were ansible runs needs to have ansible 2.0
-* The machine where firmware upgrade is taking place should have the following
-    * Package: hp-conrep
-    * Package: hpssacli for RHEL7 hosts or hpacucli for RHEL6 hosts
-    * Package: hp-scripting-tools
+* The machine where firmware upgrade is taking place:
+    * Yum must be configured to access [Firmware Upgrade for Proliant repository] (https://downloads.linux.hpe.com/SDR/project/fwpp/)
 
 Role Variables
 --------------
