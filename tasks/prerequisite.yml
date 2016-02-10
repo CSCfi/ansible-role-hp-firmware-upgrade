@@ -2,10 +2,6 @@
 - name: Installing required packages
   yum: name={{ item }} state=latest
   with_items:
-#    - python34
-#    - python-ptyprocess
-#    - python-pip
-#    - expect
     - hp-scripting-tools
  
 - name: Installing hpacucli package
@@ -15,10 +11,4 @@
 - name: Installing hpssacli package
   yum: name=hpssacli state=present
   when: ansible_distribution_major_version == '7'
-
-#- name: Copying pexpect module to remote system
-#  copy: src=../files/pexpect-4.0.1.tar.gz dest=/tmp/pexpect-4.0.1.tar.gz
-
-#- name: Installing pexpect-4.0.1
-#  pip: name='file:///tmp//pexpect-4.0.1.tar.gz'
 
