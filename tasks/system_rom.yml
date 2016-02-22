@@ -3,19 +3,29 @@
    shell: hp-conrep -s | grep -i family | awk '{print $NF}' | tr A-Z a-z
    register: systemrom
 
+ - name: Identifying firmware RPM for System ROM
+   shell: "yum search hp-firmware-system-{{ systemrom.stdout }} | grep hp-firmware-system"
+   register: system_rom_fw_rpm
+   changed_when: false
+   ignore_errors: yes
+
  - name: Installing firmware RPM for System ROM
    yum: name=hp-firmware-system-{{ systemrom.stdout }} state=latest
+   when: system_rom_fw_rpm.rc == 0
 
  - name: Firmware path lookup
    command: rpm -q hp-firmware-system-"{{ systemrom.stdout }}" 
    register: FirmwarePackage
    changed_when: False
+   when: system_rom_fw_rpm.rc == 0
 
  - name: Store path to hpsetup installer
    set_fact: firmware_installer="/usr/lib/i386-linux-gnu/{{ FirmwarePackage.stdout | splitext | first }}/hpsetup"
+   when: system_rom_fw_rpm.rc == 0
 
  - include: firmware_installer.yml
+   when: system_rom_fw_rpm.rc == 0
 
  - name: System ROM firmware Cleanup
    yum: name=hp-firmware-system-{{ systemrom.stdout }} state=absent
-
+   when: system_rom_fw_rpm.rc == 0

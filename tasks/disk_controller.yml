@@ -7,20 +7,26 @@
   shell: yum search `hpssacli ctrl all show config | grep -i smart -m 1| awk '{print $3}'` | grep -i `uname -m` | awk '{print $1}'
   register: disk_controller_rpm 
   changed_when: false
+  ignore_errors: yes
 
 - name: Installing firmware RPM for disk controller
   yum: name={{ disk_controller_rpm.stdout }} state=latest
+  when: disk_controller_rpm.rc == 0
 
 - name: Firmware path lookup
   shell: rpm -ql "{{ disk_controller_rpm.stdout }}" | grep '/hpsetup'
   register: FirmwarePackage 
   changed_when: false
+  when: disk_controller_rpm.rc == 0
 
 - name: Store path to hpsetup installer
   set_fact: firmware_installer="{{ FirmwarePackage.stdout }}"
+  when: disk_controller_rpm.rc == 0
 
 - include: firmware_installer.yml
+  when: disk_controller_rpm.rc == 0
 
 - name: Disk controller firmware Cleanup
   yum: name={{ disk_controller_rpm.stdout }} state=absent
+  when: disk_controller_rpm.rc == 0
 
