@@ -18,18 +18,29 @@
 
  - assert: { that: ilo_version | match("ilo4") }
 
+ - name: Identifying firmware for ILO
+   shell: "yum search hp-firmware-{{ ilo_version }} |grep -i hp-firmware"
+   register: ilo_fw_rpm
+   changed_when: false
+   ignore_errors: yes
+
  - name: Installing firmware RPM
    yum: name=hp-firmware-{{ ilo_version }} state=latest
+   when: ilo_fw_rpm.rc == 0
 
  - name: Firmware path lookup 
    command: rpm -q hp-firmware-"{{ ilo_version }}"
    register: FirmwarePackage
    changed_when: False
+   when: ilo_fw_rpm.rc == 0
 
  - name: Store path to hpsetup installer
    set_fact: firmware_installer="/usr/lib/i386-linux-gnu/{{ FirmwarePackage.stdout | splitext | first }}/hpsetup"
+   when: ilo_fw_rpm.rc == 0
 
  - include: firmware_installer.yml
+   when: ilo_fw_rpm.rc == 0
 
  - name: Firmware RPM cleanup 
    yum: name=hp-firmware-{{ ilo_version }} state=absent
+   when: ilo_fw_rpm.rc == 0
