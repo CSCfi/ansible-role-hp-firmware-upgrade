@@ -4,8 +4,9 @@
 - name: Identifying firmware RPM for Intel Network controller 
   shell: "yum search hp-firmware-nic-intel | grep `uname -m` | grep -i hp | awk '{ print $1}'"
   register: intel_network_controller_rpm 
-  changed_when: false
-  ignore_errors: yes
+  changed_when: False
+  ignore_errors: True
+  always_run: True
 
 - name: Installing firmware RPM for Intel Network Controller
   yum: name={{ intel_network_controller_rpm.stdout }} state=latest
@@ -16,6 +17,7 @@
   register: FirmwarePackage 
   changed_when: false
   when: intel_network_controller_rpm.rc == 0
+  always_run: True
 
 - name: Store path to hpsetup installer
   set_fact: firmware_installer="{{ FirmwarePackage.stdout }}"
