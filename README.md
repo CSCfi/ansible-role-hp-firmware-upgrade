@@ -3,7 +3,7 @@ ansible-role-hp-firmware-upgrade
 
 Ansible role to upgrade HP system firmwares. List of components upgraded by this role are
 
-* ILO
+* iLO (4 or higher)
 * System ROM
 * Power Management Controller
 * Smart Array disk controller
