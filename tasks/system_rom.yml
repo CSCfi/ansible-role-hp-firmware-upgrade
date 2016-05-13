@@ -2,12 +2,16 @@
  - name: Identifying System ROM device
    shell: hp-conrep -s | grep -i family | awk '{print $NF}' | tr A-Z a-z
    register: systemrom
+   always_run: True
 
  - name: Identifying firmware RPM for System ROM
    shell: "yum search hp-firmware-system-{{ systemrom.stdout }} | grep hp-firmware-system"
    register: system_rom_fw_rpm
-   changed_when: false
-   ignore_errors: yes
+   changed_when: False
+   ignore_errors: True
+   always_run: True
+
+ - debug: var=systemrom.stdout
 
  - name: Installing firmware RPM for System ROM
    yum: name=hp-firmware-system-{{ systemrom.stdout }} state=latest
@@ -18,6 +22,7 @@
    register: FirmwarePackage
    changed_when: False
    when: system_rom_fw_rpm.rc == 0
+   always_run: True
 
  - name: Store path to hpsetup installer
    set_fact: firmware_installer="/usr/lib/i386-linux-gnu/{{ FirmwarePackage.stdout | splitext | first }}/hpsetup"
