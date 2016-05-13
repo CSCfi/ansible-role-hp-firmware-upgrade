@@ -30,7 +30,7 @@ Installation
 Dependencies
 ------------
 
-The role ```ksingh7.hp-firmware-upgrade``` must be installed.
+The role ```ksingh7.ansible-role-hp-firmware-upgrade``` must be installed.
 
 Example Playbook
 ----------------
@@ -39,7 +39,7 @@ Example Playbook
 ```
 - hosts: servers
   roles:
-     - { role: ksingh7.hp-firmware-upgrade }
+     - { role: ksingh7.ansible-role-hp-firmware-upgrade }
 ```
 License
 -------
@@ -50,3 +50,5 @@ Author Information
 ------------------
 
 This role was created by [Karan Singh](http://www.ksingh.co.in)
+Contributions:
+ - https://github.com/martbhell/ Johan Guldmyr
