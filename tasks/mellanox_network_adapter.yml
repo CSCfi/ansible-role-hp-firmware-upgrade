@@ -6,7 +6,7 @@
   register: mellanox_fw_rpm
   changed_when: False
   ignore_errors: True
-  always_run: True
+  check_mode = no
 
 - name: Installing firmware RPM for Mellanox Network adapter 
   yum: name=hp-firmware-hca-mellanox-vpi-eth-ib state=latest
@@ -17,7 +17,7 @@
   register: FirmwarePackage 
   changed_when: false
   when: mellanox_fw_rpm.rc == 0
-  always_run: True
+  check_mode = no
 
 - name: Store path to hpsetup installer
   set_fact: firmware_installer="{{ FirmwarePackage.stdout }}"
