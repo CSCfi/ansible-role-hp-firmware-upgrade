@@ -1,14 +1,6 @@
 ---
 - name: Installing required packages
-  yum: name={{ item }} state=latest
+  package: name={{ item }} state=latest
   with_items:
     - hp-scripting-tools
- 
-- name: Installing hpacucli package
-  yum: name=hpacucli state=present
-  when: ansible_distribution_major_version == '6'
-
-- name: Installing hpssacli package
-  yum: name=hpssacli state=present
-  when: ansible_distribution_major_version == '7'
-
+    - hpssacli
