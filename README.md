@@ -27,12 +27,12 @@ You can customize your selection by editing ```defaults/main.yml```
 Installation
 ------------
 
-```$ ansible-galaxy install ksingh7.hp-firmware-upgrade```
+```$ ansible-galaxy install CSC-IT-Center-for-Science.hp-firmware-upgrade ```
 
 Dependencies
 ------------
 
-The role ```ksingh7.ansible-role-hp-firmware-upgrade``` must be installed.
+The role ```CSC-IT-Center-for-Science.hp-firmware-upgrade``` must be installed.
 
 Example Playbook
 ----------------
@@ -41,7 +41,7 @@ Example Playbook
 ```
 - hosts: servers
   roles:
-     - { role: ksingh7.ansible-role-hp-firmware-upgrade }
+     - { role: CSC-IT-Center-for-Science.hp-firmware-upgrade }
 ```
 License
 -------
@@ -54,3 +54,4 @@ Author Information
 This role was created by [Karan Singh](http://www.ksingh.co.in)
 Contributions:
  - https://github.com/martbhell/ Johan Guldmyr
+ - https://github.com/Kallio/
