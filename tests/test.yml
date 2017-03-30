@@ -6,14 +6,14 @@
    pre_tasks:
        - name: Install HPE SPP repo
          yum_repository:
-           name: "hp spp"
-           description: "hpe spp"
+           name: "hpspp"
+           description: "hpespp"
            baseurl: "http://downloads.linux.hpe.com/repo/spp/rhel/7/x86_64/current/"
            gpgcheck: "no"
        - name: Install HPE STK repo
          yum_repository:
-           name: "hp stk"
-           description: "hpe stk"
+           name: "hpstk"
+           description: "hpestk"
            baseurl: "http://downloads.linux.hpe.com/SDR/repo/stk/rhel/7/x86_64/current/"
            gpgcheck: "no"
 
