@@ -3,5 +3,13 @@
  - hosts: localhost
    remote_user: root
 
+   pre_tasks:
+       - name: Install HPE SPP repo
+         yum_repository:
+           name: "hp spp"
+           description: "hpe spp"
+           baseurl: "http://downloads.linux.hpe.com/repo/spp/rhel/7/x86_64/current/"
+           gpgcheck: "no"
+
    roles:
      - ansible-role-hp-firmware-upgrade
