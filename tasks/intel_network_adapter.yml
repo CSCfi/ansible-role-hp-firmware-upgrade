@@ -6,7 +6,7 @@
   register: intel_network_controller_rpm 
   changed_when: False
   ignore_errors: True
-  check_mode = no
+  check_mode: no
 
 - name: Installing firmware RPM for Intel Network Controller
   yum: name={{ intel_network_controller_rpm.stdout }} state=latest
@@ -17,7 +17,7 @@
   register: FirmwarePackage 
   changed_when: false
   when: intel_network_controller_rpm.rc == 0
-  check_mode = no
+  check_mode: no
 
 - name: Store path to hpsetup installer
   set_fact: firmware_installer="{{ FirmwarePackage.stdout }}"
