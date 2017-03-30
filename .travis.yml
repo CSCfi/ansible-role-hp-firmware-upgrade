@@ -1,0 +1,56 @@
+language: python
+
+sudo: required
+dist: trusty
+group: edge
+
+services:
+  - docker
+
+matrix:
+  fast_finish: true
+
+env:
+#  - IMAGE_BUILD_PLATFORM=devel-centos7
+  - IMAGE_BUILD_PLATFORM=epel-centos7
+
+install:
+  - npm install -g validate-dockerfile
+
+before_script:
+  # TESTDIR = Where the stable-centos/Dockerfile is located
+  - export TESTDIR=tests
+  # ROLETOTEST = The name of this repo
+  - export ROLETOTEST=$(basename $(pwd))
+  - export COMMIT=${TRAVIS_COMMIT::8}
+  # The tag we assign the docker image we build with the Dockerfile
+  - export REPO=csc/ansible
+  # https://www.npmjs.com/package/validate-dockerfile - validate the Dockerfile
+  - docklint ${TESTDIR}/${IMAGE_BUILD_PLATFORM}/Dockerfile
+  # Build the image
+  - docker build -t ${REPO}:${IMAGE_BUILD_PLATFORM} ${TESTDIR}/${IMAGE_BUILD_PLATFORM}/
+  # Launch the container
+  - docker run --privileged -d -ti -e "container=docker"  -v `pwd`:/$ROLETOTEST -v /sys/fs/cgroup:/sys/fs/cgroup  ${REPO}:${IMAGE_BUILD_PLATFORM}  /usr/sbin/init
+  - DOCKER_CONTAINER_ID=$(docker ps | grep ${IMAGE_BUILD_PLATFORM} | awk '{print $1}')
+  - docker logs $DOCKER_CONTAINER_ID
+  # Testing of this ansible-role:
+script:
+  - docker exec -ti $DOCKER_CONTAINER_ID /bin/sh -c "/$ROLETOTEST/tests/test-in-docker-image.sh"
+after_script:
+  # Print some logs and other useful information for debugging travis:
+  - >
+    docker exec -ti $DOCKER_CONTAINER_ID /bin/sh -c 'echo -ne "------\nEND ANSIBLE TESTS\n------\nSystemD Units:\n------\n";
+       systemctl --no-pager --all --full status ;
+       echo -ne "------\nJournalD Logs:\n------\n" ;
+       sudo journalctl --catalog --all --full --no-pager'
+  - docker exec -ti $DOCKER_CONTAINER_ID /bin/sh -c 'tree /ansible*'
+  - docker ps -a
+  - docker stop $DOCKER_CONTAINER_ID
+  - docker rm -v $DOCKER_CONTAINER_ID
+#after_success:
+#  - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+
+notifications:
+  email: false
+  flowdock:
+    secure: "lxqZTTUCUYy19JzwXnH/kRcndYwNasUYpa0AK0vcRqTRSoULRzwE2jcJUk2YBz0qTBcTgAkinj1VQbImdrl68NTPDTmOZM4+hPZ8RQNTGR7VJwy4Ynjl/RtvxmwvoW/kSZJI3twDvPpAl2yEKfiPwSE4kYNFs84w43WieNhX3qO0LN9EdFykV6M0xeZgGc71v6oGof3n9HhBMfMUYU6YZJKvirHJNwAxHsWiFSq+dfDA5hqDyilwuQM0toNgjsFi6F7b40vOVJPGJKdSNekrFgp2Gm/Fzd83sO/Sp1ord9v73UflshejKuK2/iMRddPW5JDl05FNrJ7x6xcCfK9sxOj5KDELotagHCDdCTqX4USelBpI7DeO9yV8NAIxyL2KAFi5b3uwvF5reitGhRfdeqA0B9eK+k6vdRQ/xKryYc48hVX46wraL2ibZv2gbic7vpYdxiWFUirKB9NBoQu7JHkTT/LT3LjbC9/uL9c4qRyakAnQwhgi4/sEk7f9euvtZA6MJfZpCzfiYVt3rGe6H9HqcCflnxW5F1ZjLBSkHk02rNn6hcfFxGHSS5x1362F9JCwVkAWgJ43JvQLRxobW4htbx56+niX0zS+vs2kK5K3NxUCJzInUb4UV5/9lwcCBZQJL0fD4u2Gy8/TC7MrhhOVxkSSPmjjoonaRPY497c="
