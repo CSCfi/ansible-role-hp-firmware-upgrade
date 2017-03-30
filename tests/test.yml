@@ -10,6 +10,12 @@
            description: "hpe spp"
            baseurl: "http://downloads.linux.hpe.com/repo/spp/rhel/7/x86_64/current/"
            gpgcheck: "no"
+       - name: Install HPE STK repo
+         yum_repository:
+           name: "hp stk"
+           description: "hpe stk"
+           baseurl: "http://downloads.linux.hpe.com/SDR/repo/stk/rhel/7/x86_64/current/"
+           gpgcheck: "no"
 
    roles:
      - ansible-role-hp-firmware-upgrade
