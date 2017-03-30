@@ -133,8 +133,8 @@ function main(){
 #    test_install_requirements
     test_ansible_setup
     test_playbook_syntax
-    test_playbook
-    test_playbook_check
+#    test_playbook
+#    test_playbook_check
 #    extra_tests
 
 }
