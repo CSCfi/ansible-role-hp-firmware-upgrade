@@ -8,7 +8,7 @@
   register: disk_controller_rpm 
   changed_when: False
   ignore_errors: True
-  always_run: True
+  check_mode: no
 
 - name: Installing firmware RPM for disk controller
   yum: name={{ disk_controller_rpm.stdout }} state=latest
@@ -19,7 +19,7 @@
   register: FirmwarePackage 
   changed_when: false
   when: disk_controller_rpm.rc == 0
-  always_run: True
+  check_mode: no
 
 - name: Store path to hpsetup installer
   set_fact: firmware_installer="{{ FirmwarePackage.stdout }}"

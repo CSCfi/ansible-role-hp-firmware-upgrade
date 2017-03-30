@@ -9,7 +9,7 @@
    command: lspci -s 01:00.0 -m
    register: ilo_info
    changed_when: False
-   always_run: True
+   check_mode: no
 
    # We need to get the "iLO4" from the above into a varible
    # using the python split fuction on the '"' character and the 2nd from last
@@ -24,7 +24,7 @@
    register: ilo_fw_rpm
    changed_when: False
    ignore_errors: True
-   always_run: True
+   check_mode: no
 
  - name: Installing firmware RPM
    package: name=hp-firmware-{{ ilo_version }} state=latest
