@@ -27,14 +27,13 @@
    always_run: True
 
  - name: Installing firmware RPM
-   yum: name=hp-firmware-{{ ilo_version }} state=latest
+   package: name=hp-firmware-{{ ilo_version }} state=latest
    when: ilo_fw_rpm.rc == 0
 
  - name: Firmware path lookup 
    command: rpm -q hp-firmware-"{{ ilo_version }}"
    register: FirmwarePackage
    changed_when: False
-   always_run: True
    when: ilo_fw_rpm.rc == 0
 
  - name: Store path to hpsetup installer
@@ -45,5 +44,5 @@
    when: ilo_fw_rpm.rc == 0
 
  - name: Firmware RPM cleanup 
-   yum: name=hp-firmware-{{ ilo_version }} state=absent
+   package: name=hp-firmware-{{ ilo_version }} state=absent
    when: ilo_fw_rpm.rc == 0
