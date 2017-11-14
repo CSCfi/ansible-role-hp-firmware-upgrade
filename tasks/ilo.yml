@@ -20,29 +20,35 @@
  - assert: { that: ilo_version | match("ilo4") }
 
  - name: Identifying firmware for ILO
-   shell: "yum search hp-firmware-{{ ilo_version }} |grep -i hp-firmware"
+   shell: "yum search {{ ilo_version }} |grep -i firmware"
    register: ilo_fw_rpm
    changed_when: False
    ignore_errors: True
    check_mode: no
 
- - name: Installing firmware RPM
-   package: name=hp-firmware-{{ ilo_version }} state=latest
+ - name: annoying set_fact hack for ilo_fw_rpm_package
+   set_fact: ilo_fw_rpm_package=" {{ ilo_fw_rpm.stdout.split(':')[0] }}"
    when: ilo_fw_rpm.rc == 0
 
- - name: Firmware path lookup 
-   command: rpm -q hp-firmware-"{{ ilo_version }}"
+ - name: Installing firmware RPM
+   yum: name={{ ilo_fw_rpm_package }}  state=latest
+   when: ilo_fw_rpm.rc == 0
+
+ - name: extract path for hpsetup command
+   shell: "rpm -ql {{ ilo_fw_rpm_package }}|grep /hpsetup"
    register: FirmwarePackage
    changed_when: False
+   check_mode: no
    when: ilo_fw_rpm.rc == 0
 
- - name: Store path to hpsetup installer
-   set_fact: firmware_installer="/usr/lib/i386-linux-gnu/{{ FirmwarePackage.stdout | splitext | first }}/hpsetup"
+ - name: annoying set_fact firmware_installer path from FirmwarePackage
+   set_fact: firmware_installer="{{ FirmwarePackage.stdout | splitext | first }}"
    when: ilo_fw_rpm.rc == 0
+
 
  - include: firmware_installer.yml
    when: ilo_fw_rpm.rc == 0
 
- - name: Firmware RPM cleanup 
-   package: name=hp-firmware-{{ ilo_version }} state=absent
+ - name: Firmware RPM cleanup
+   yum: name={{ ilo_fw_rpm_package }} state=absent
    when: ilo_fw_rpm.rc == 0
