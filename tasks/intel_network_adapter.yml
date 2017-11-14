@@ -2,18 +2,18 @@
 - assert: { that: "ansible_system_vendor == 'HP'" }
 
 - name: Identifying firmware RPM for Intel Network controller
-  shell: "yum search hp-firmware-nic-intel | grep `uname -m` | grep -i hp | cut -f1"
+  shell: "yum search hp-firmware-nic-intel | grep -i hpe"
   register: intel_network_controller_rpm
   changed_when: False
   ignore_errors: True
   check_mode: no
 
 - name: Installing firmware RPM for Intel Network Controller
-  yum: name={{ intel_network_controller_rpm.stdout }} state=latest
+  yum: name={{ intel_network_controller_rpm.stdout.split(':')[0]  }} state=latest
   when: intel_network_controller_rpm.rc == 0
 
 - name: Firmware path lookup
-  shell: rpm -ql "{{ intel_network_controller_rpm.stdout }}" | grep '/hpsetup'
+  shell: rpm -ql "{{ intel_network_controller_rpm.stdout.split(':')[0]  }}" | grep '/hpsetup'
   register: FirmwarePackage
   changed_when: false
   when: intel_network_controller_rpm.rc == 0
@@ -27,5 +27,5 @@
   when: intel_network_controller_rpm.rc == 0
 
 - name: Intel Network Controller firmware Cleanup
-  yum: name={{ intel_network_controller_rpm.stdout }} state=absent
+  yum: name={{ intel_network_controller_rpm.stdout.split(':')[0]  }} state=absent
   when: intel_network_controller_rpm.rc == 0
