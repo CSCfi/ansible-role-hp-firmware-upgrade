@@ -21,34 +21,10 @@
 
  - name: Identifying firmware for ILO
    shell: "yum search {{ ilo_version }} |grep -i firmware"
-   register: ilo_fw_rpm
+   register: fw_rpm
    changed_when: False
    ignore_errors: True
    check_mode: no
 
- - name: annoying set_fact hack for ilo_fw_rpm_package
-   set_fact: ilo_fw_rpm_package=" {{ ilo_fw_rpm.stdout.split(':')[0] }}"
-   when: ilo_fw_rpm.rc == 0
-
- - name: Installing firmware RPM
-   yum: name={{ ilo_fw_rpm_package }}  state=latest
-   when: ilo_fw_rpm.rc == 0
-
- - name: extract path for hpsetup command
-   shell: "rpm -ql {{ ilo_fw_rpm_package }}|grep /hpsetup"
-   register: FirmwarePackage
-   changed_when: False
-   check_mode: no
-   when: ilo_fw_rpm.rc == 0
-
- - name: annoying set_fact firmware_installer path from FirmwarePackage
-   set_fact: firmware_installer="{{ FirmwarePackage.stdout | splitext | first }}"
-   when: ilo_fw_rpm.rc == 0
-
-
  - include: firmware_installer.yml
-   when: ilo_fw_rpm.rc == 0
-
- - name: Firmware RPM cleanup
-   yum: name={{ ilo_fw_rpm_package }} state=absent
-   when: ilo_fw_rpm.rc == 0
+   when: fw_rpm.rc == 0

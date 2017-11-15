@@ -3,29 +3,7 @@
 
 - name: Identifying firmware RPM for Intel Network controller
   shell: "yum search hp-firmware-nic-intel | grep -i hpe"
-  register: intel_network_controller_rpm
+  register: fw_rpm
   changed_when: False
   ignore_errors: True
   check_mode: no
-
-- name: Installing firmware RPM for Intel Network Controller
-  yum: name={{ intel_network_controller_rpm.stdout.split(':')[0]  }} state=latest
-  when: intel_network_controller_rpm.rc == 0
-
-- name: Firmware path lookup
-  shell: rpm -ql "{{ intel_network_controller_rpm.stdout.split(':')[0]  }}" | grep '/hpsetup'
-  register: FirmwarePackage
-  changed_when: false
-  when: intel_network_controller_rpm.rc == 0
-  check_mode: no
-
-- name: Store path to hpsetup installer
-  set_fact: firmware_installer="{{ FirmwarePackage.stdout }}"
-  when: intel_network_controller_rpm.rc == 0
-
-- include: firmware_installer.yml
-  when: intel_network_controller_rpm.rc == 0
-
-- name: Intel Network Controller firmware Cleanup
-  yum: name={{ intel_network_controller_rpm.stdout.split(':')[0]  }} state=absent
-  when: intel_network_controller_rpm.rc == 0

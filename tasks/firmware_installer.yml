@@ -1,4 +1,19 @@
 ---
+- name: annoying set_fact hack for fw_rpm_package
+  set_fact: fw_rpm_package=" {{ fw_rpm.stdout.split(':')[0] }}"
+
+- name: Installing firmware RPM
+  yum: name={{ fw_rpm_package }}  state=latest
+
+- name: extract path for hpsetup command
+  shell: "rpm -ql {{ fw_rpm_package }}|grep /hpsetup"
+  register: FirmwarePackage
+  changed_when: False
+  check_mode: no
+
+- name: annoying set_fact firmware_installer path from FirmwarePackage
+  set_fact: firmware_installer="{{ FirmwarePackage.stdout | splitext | first }}"
+
 - name: Clearing previous log entries
   copy:
     content: ""
@@ -11,3 +26,6 @@
   ignore_errors: true
 
 - debug: msg="Installer output {{lookup('file', '/var/cpq/Component.log') }}"
+
+- name: Firmware RPM cleanup
+  package: name={{ fw_rpm_package }} state=absent

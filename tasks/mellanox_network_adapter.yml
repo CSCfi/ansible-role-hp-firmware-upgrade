@@ -3,46 +3,7 @@
 
 - name: Identifying firmware RPM for Mellanox Network Adapter
   shell: "yum search hp-firmware-hca-mellanox-vpi-eth-ib |grep hp-firmware-hca-mellanox-vpi-eth-ib"
-  register: mellanox_fw_rpm
+  register: fw_rpm
   changed_when: False
   ignore_errors: True
   check_mode: no
-
-- name: Installing firmware RPM for Mellanox Network adapter 
-  yum: name=hp-firmware-hca-mellanox-vpi-eth-ib state=latest
-  when: mellanox_fw_rpm.rc == 0
-
-- name: Firmware path lookup
-  shell: rpm -ql hp-firmware-hca-mellanox-vpi-eth-ib | grep '/hpsetup'
-  register: FirmwarePackage 
-  changed_when: false
-  when: mellanox_fw_rpm.rc == 0
-  check_mode: no
-
-- name: Store path to hpsetup installer
-  set_fact: firmware_installer="{{ FirmwarePackage.stdout }}"
-  when: mellanox_fw_rpm.rc == 0
-
-- name: Clearing previous log entries
-  shell: "> /var/cpq/Component.log"
-  ignore_errors: true
-  changed_when: false
-  when: mellanox_fw_rpm.rc == 0
-
-- name: Installing firmware
-  command: "{{ firmware_installer }} -y "
-  ignore_errors: true
-  when: mellanox_fw_rpm.rc == 0
-
-- name: Displaying Firmware installation logs
-  shell: "cat /var/cpq/Component.log"
-  register: InstallLog
-  changed_when: false
-  when: mellanox_fw_rpm.rc == 0
-
-- debug: var=InstallLog.stdout_lines
-  when: mellanox_fw_rpm.rc == 0
-
-- name: Mellanox Network adapter firmware Cleanup
-  yum: name=hp-firmware-hca-mellanox-vpi-eth-ib state=absent
-  when: mellanox_fw_rpm.rc == 0
