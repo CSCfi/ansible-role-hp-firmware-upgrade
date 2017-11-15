@@ -1,5 +1,4 @@
 ---
-
  - name: Identifying System ROM device
    shell: hp-conrep -s | grep -i family | awk '{print $NF}' | tr A-Z a-z
    register: systemrom
@@ -12,5 +11,6 @@
    ignore_errors: True
    check_mode: no
 
- - include: firmware_installer.yml
+ - name: Running the actual installer generic for all HPE devices
+   include_tasks: firmware_installer.yml
    when: fw_rpm.rc == 0

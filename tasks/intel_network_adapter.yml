@@ -2,8 +2,11 @@
 - assert: { that: "ansible_system_vendor == 'HP'" }
 
 - name: Identifying firmware RPM for Intel Network controller
-  shell: "yum search hp-firmware-nic-intel | grep -i hpe"
+  shell: "yum search firmware-nic-intel | grep -i hpe"
   register: fw_rpm
   changed_when: False
   ignore_errors: True
   check_mode: no
+
+- include_tasks: firmware_installer.yml
+  when: fw_rpm.rc == 0

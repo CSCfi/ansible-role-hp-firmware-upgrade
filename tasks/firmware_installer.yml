@@ -2,8 +2,8 @@
 - name: annoying set_fact hack for fw_rpm_package
   set_fact: fw_rpm_package=" {{ fw_rpm.stdout.split(':')[0] }}"
 
-- name: Installing firmware RPM
-  yum: name={{ fw_rpm_package }}  state=latest
+- name: Installing firmware "{{ fw_rpm_package }}"
+  yum: name={{ fw_rpm_package | splitext | first }}  state=latest
 
 - name: extract path for hpsetup command
   shell: "rpm -ql {{ fw_rpm_package }}|grep /hpsetup"
@@ -24,8 +24,15 @@
 - name: Installing firmware in silent mode
   command: "{{ firmware_installer }} -f -s "
   ignore_errors: true
+# for debugging purposes you can readout the component log
 
-- debug: msg="Installer output {{lookup('file', '/var/cpq/Component.log') }}"
+- name: Testing if log file exists
+  stat: path='/var/cpq/Component.log'
+  register: optional_file
+
+- debug:
+    msg: "Installer output {{lookup('file', '/var/cpq/Component.log') }}"
+  when: optional_file.stat.exists
 
 - name: Firmware RPM cleanup
   package: name={{ fw_rpm_package }} state=absent

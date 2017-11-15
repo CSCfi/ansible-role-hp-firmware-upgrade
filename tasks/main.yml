@@ -1,5 +1,5 @@
 ---
-- include: prerequisite.yml 
+- include_tasks: prerequisite.yml
   tags:
     - ilo
     - system-rom
@@ -9,38 +9,37 @@
     - intel-network-adapter
     - mellanox-network-adapter
 
-- include: ilo.yml
+- include_tasks: ilo.yml
   tags:
     - ilo
   when: upgrade_ilo_firmware
 
-- include: system_rom.yml 
+- include_tasks: system_rom.yml
   tags:
    - system-rom
   when: upgrade_system_rom_firmware
 
-- include: disk_controller.yml
+- include_tasks: disk_controller.yml
   tags:
-   - disk-controller 
+   - disk-controller
   when: upgrade_disk_controller_firmware
 
-- include: disk_drive.yml
+- include_tasks: disk_drive.yml
   tags:
    - disk-drive
   when: upgrade_disk_drive_firmware
 
-- include: power_management_controller.yml 
+- include_tasks: power_management_controller.yml
   tags:
-   - power-management-controller 
+   - power-management-controller
   when: upgrade_power_management_controller_firmware
 
-- include: intel_network_adapter.yml
+- include_tasks: intel_network_adapter.yml
   tags:
    - intel-network-adapter
   when: upgrade_intel_network_adapter_firmware
 
-- include: mellanox_network_adapter.yml
+- include_tasks: mellanox_network_adapter.yml
   tags:
    - mellanox-network-adapter
   when: upgrade_mellanox_network_adapter_firmware
-

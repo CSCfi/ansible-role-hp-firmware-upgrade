@@ -7,3 +7,6 @@
   changed_when: False
   ignore_errors: True
   check_mode: no
+
+- include_tasks: firmware_installer.yml
+  when: fw_rpm.rc == 0

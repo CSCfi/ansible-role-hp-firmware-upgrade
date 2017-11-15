@@ -26,5 +26,5 @@
    ignore_errors: True
    check_mode: no
 
- - include: firmware_installer.yml
+ - include_tasks: firmware_installer.yml
    when: fw_rpm.rc == 0
