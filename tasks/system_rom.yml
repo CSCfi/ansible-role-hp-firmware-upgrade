@@ -1,11 +1,11 @@
 ---
  - name: Identifying System ROM device
-   shell: hp-conrep -s | grep -i family | awk '{print $NF}' | tr A-Z a-z
+   shell: dmidecode -t 0 |grep Version:| awk '{print $NF}'
    register: systemrom
    check_mode: no
 
  - name: Identifying firmware RPM for System ROM
-   shell: "yum search firmware-system-{{ systemrom.stdout }} | grep firmware-system"
+   shell: "yum search firmware-system-U19|grep HPE |awk '{print $1;exit}'"
    register: fw_rpm
    changed_when: False
    ignore_errors: True
