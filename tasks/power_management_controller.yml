@@ -2,7 +2,7 @@
 - assert: { that: "ansible_system_vendor == 'HP'" }
 
 - name: Identifying firmware RPM for Power Mangement Controller
-  shell: yum search `hp-conrep -s | grep  "System Type" | awk '{print $NF}' | tr A-Z a-z` | grep -i powerpic | awk '{print $1}'
+  shell: yum  search `dmidecode -s system-product-name | awk '{print "powerpic " tolower($NF)}'` |grep ROM| awk '{print $1;exit}'
   register: fw_rpm
   changed_when: False
   ignore_errors: True

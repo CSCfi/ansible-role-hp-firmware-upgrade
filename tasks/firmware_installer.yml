@@ -20,7 +20,7 @@
 
 
 - name: Installing firmware from "{{ item }}"  in silent mode
-  command: "{{ firmware_installer }} -f -s "
+  command: "{{ firmware_installer }}  -s "
   ignore_errors: true
 
 - name: Testing if log file exists
