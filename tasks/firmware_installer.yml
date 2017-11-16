@@ -1,12 +1,16 @@
 ---
-- name: annoying set_fact hack for fw_rpm_package
-  set_fact: fw_rpm_package=" {{ fw_rpm.stdout.split(':')[0] }}"
 
-- name: Installing firmware "{{ fw_rpm_package }}"
-  yum: name={{ fw_rpm_package | splitext | first }}  state=latest
+- name: Clearing previous log entries
+  file:
+    path: "/var/cpq/Component.log"
+    state: absent
+  ignore_errors: true
+
+- name: Installing firmware "{{ item }}"
+  yum: name={{ item | splitext | first }}  state=latest
 
 - name: extract path for hpsetup command
-  shell: "rpm -ql {{ fw_rpm_package }}|grep /hpsetup"
+  shell: "rpm -ql {{ item }}|grep /hpsetup"
   register: FirmwarePackage
   changed_when: False
   check_mode: no
@@ -14,25 +18,19 @@
 - name: annoying set_fact firmware_installer path from FirmwarePackage
   set_fact: firmware_installer="{{ FirmwarePackage.stdout | splitext | first }}"
 
-- name: Clearing previous log entries
-  copy:
-    content: ""
-    dest: /var/cpq/Component.log
-  ignore_errors: true
-  changed_when: false
 
-- name: Installing firmware in silent mode
+- name: Installing firmware from "{{ item }}"  in silent mode
   command: "{{ firmware_installer }} -f -s "
   ignore_errors: true
-# for debugging purposes you can readout the component log
 
 - name: Testing if log file exists
   stat: path='/var/cpq/Component.log'
   register: optional_file
 
-- debug:
-    msg: "Installer output {{lookup('file', '/var/cpq/Component.log') }}"
+- name: Print optional installer log for "{{ item }}"
+  command: "/bin/cat {{ optional_file.stat.path }}"
+  register: details
   when: optional_file.stat.exists
 
 - name: Firmware RPM cleanup
-  package: name={{ fw_rpm_package }} state=absent
+  package: name={{ item }} state=absent

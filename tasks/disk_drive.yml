@@ -1,11 +1,14 @@
 ---
 - assert: { that: "ansible_system_vendor == 'HP'" }
 
+#following expects that your system has only same type disks on thats why this incredible stupid hack
 - name: Identifying firmware RPM for disk drives
-  shell: "yum search `hpssacli ctrl all show config detail | grep Model: | grep HP -m1 | awk '{print $NF}'` | grep -i hp-firmware | awk '{print $1}' | grep `uname  -m`"
+  shell: "yum search `hpssacli ctrl all show config detail | grep \"Model: HP\" | sort -u| awk '{print $NF}'` | grep -i hp-firmware | awk '{print $1}' | grep `uname  -m`"
   register: fw_rpm
   changed_when: false
   ignore_errors: yes
 
-- include_tasks: firmware_installer.yml
+- name: running generic tasks for all firmware things
+  include_tasks: firmware_installer.yml
+  with_items: "{{ fw_rpm.stdout_lines }}"
   when: fw_rpm.rc == 0

@@ -4,12 +4,12 @@
 - modprobe: name=sg state=present
 
 - name: Identifying firmware RPM for disk controller device
-  shell: yum search `hpssacli ctrl all show config | grep -i smart -m 1| awk '{print $3}'` | grep -i `uname -m` | awk '{print $1}'
+  shell: yum search `hpssacli ctrl all show config | grep -i smart -m 1| awk '{print $3}'` | grep -i `uname -m` | awk '{print $1;exit}'
   register: fw_rpm
   changed_when: False
   ignore_errors: True
   check_mode: no
 
-- name: Running the actual installer, generic for all HPE devices 
+- name: Running the actual installer, for "{{fw_rpm.stdout}}"
   include_tasks: firmware_installer.yml
   when: fw_rpm.rc == 0

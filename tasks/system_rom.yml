@@ -5,12 +5,13 @@
    check_mode: no
 
  - name: Identifying firmware RPM for System ROM
-   shell: "yum search firmware-system-{{ systemrom.stdout }} | grep hp-firmware-system"
+   shell: "yum search firmware-system-{{ systemrom.stdout }} | grep firmware-system"
    register: fw_rpm
    changed_when: False
    ignore_errors: True
    check_mode: no
 
- - name: Running the actual installer generic for all HPE devices
+ - name: running generic tasks for all firmware things
    include_tasks: firmware_installer.yml
+   with_items: "{{ fw_rpm.stdout_lines }}"
    when: fw_rpm.rc == 0
