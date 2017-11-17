@@ -15,7 +15,7 @@
   changed_when: False
   check_mode: no
 
-- name: annoying set_fact firmware_installer path from FirmwarePackage
+- name:  set_fact for firmware_installer path from "{{ item }}" RPM
   set_fact: firmware_installer="{{ FirmwarePackage.stdout | splitext | first }}"
 
 
@@ -27,10 +27,15 @@
   stat: path='/var/cpq/Component.log'
   register: optional_file
 
-- name: Print optional installer log for "{{ item }}"
+- name: Gather optional installer log for "{{ item }}"
   command: "/bin/cat {{ optional_file.stat.path }}"
   register: details
   when: optional_file.stat.exists
+
+- name: Print optional installer log for "{{ item }}"
+  debug:
+  msg: "{{ details.stdout_lines }}"
+  when: details.rc == 0
 
 - name: Firmware RPM cleanup
   package: name={{ item }} state=absent
