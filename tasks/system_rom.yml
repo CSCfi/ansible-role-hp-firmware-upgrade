@@ -1,37 +1,17 @@
 ---
-
  - name: Identifying System ROM device
-   shell: hp-conrep -s | grep -i family | awk '{print $NF}' | tr A-Z a-z
+   shell: dmidecode -t 0 |grep Version:| awk '{print $NF}'
    register: systemrom
    check_mode: no
 
  - name: Identifying firmware RPM for System ROM
-   shell: "yum search hp-firmware-system-{{ systemrom.stdout }} | grep hp-firmware-system"
-   register: system_rom_fw_rpm
+   shell: "yum search {{systemrom.stdout}} system|grep HP |awk '{print $1;exit}'"
+   register: fw_rpm
    changed_when: False
    ignore_errors: True
    check_mode: no
 
- - debug: var=systemrom.stdout
-
- - name: Installing firmware RPM for System ROM
-   yum: name=hp-firmware-system-{{ systemrom.stdout }} state=latest
-   when: system_rom_fw_rpm.rc == 0
-
- - name: Firmware path lookup
-   command: rpm -q hp-firmware-system-"{{ systemrom.stdout }}" 
-   register: FirmwarePackage
-   changed_when: False
-   when: system_rom_fw_rpm.rc == 0
-   check_mode: no
-
- - name: Store path to hpsetup installer
-   set_fact: firmware_installer="/usr/lib/i386-linux-gnu/{{ FirmwarePackage.stdout | splitext | first }}/hpsetup"
-   when: system_rom_fw_rpm.rc == 0
-
- - include: firmware_installer.yml
-   when: system_rom_fw_rpm.rc == 0
-
- - name: System ROM firmware Cleanup
-   yum: name=hp-firmware-system-{{ systemrom.stdout }} state=absent
-   when: system_rom_fw_rpm.rc == 0
+ - name: running generic tasks for all firmware things for  {{systemrom}}
+   include_tasks: firmware_installer.yml
+   with_items: "{{ fw_rpm.stdout_lines }}"
+   when: fw_rpm.rc == 0

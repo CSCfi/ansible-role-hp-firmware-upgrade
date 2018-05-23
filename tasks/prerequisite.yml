@@ -1,5 +1,5 @@
 ---
-- name: Installing required packages
+- name: Installing required packages like hp-scripting-tools and hpssacli
   package: name={{ item }} state=latest
   with_items:
     - hp-scripting-tools

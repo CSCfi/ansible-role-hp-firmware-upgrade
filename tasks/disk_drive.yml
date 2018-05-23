@@ -1,29 +1,14 @@
 ---
 - assert: { that: "ansible_system_vendor == 'HP'" }
 
-- name: Identifying firmware RPM for disk drives 
-  shell: "yum search `hpssacli ctrl all show config detail | grep Model: | grep HP -m1 | awk '{print $NF}'` | grep -i hp-firmware | awk '{print $1}' | grep `uname  -m`"
-  register: disk_drive_rpm 
+#following expects that your system has only same type disks on thats why this incredible stupid hack
+- name: Identifying firmware RPM for disk drives
+  shell: "yum search `hpssacli ctrl all show config detail | grep 'Model:' |grep -E '(ATA|HP)' | sort -u| awk '{print $NF}'` | grep -i hp-firmware | awk '{print $1}' | grep `uname  -m`"
+  register: fw_rpm
   changed_when: false
   ignore_errors: yes
 
-- name: Installing firmware RPM for disk drive
-  yum: name={{ disk_drive_rpm.stdout }} state=latest
-  when: disk_drive_rpm.rc == 0
-
-- name: Firmware path lookup
-  shell: rpm -ql "{{ disk_drive_rpm.stdout }}" | grep '/hpsetup'
-  register: FirmwarePackage 
-  changed_when: false
-  when: disk_drive_rpm.rc == 0
-
-- name: Store path to hpsetup installer
-  set_fact: firmware_installer="{{ FirmwarePackage.stdout }}"
-  when: disk_drive_rpm.rc == 0
-
-- include: firmware_installer.yml
-  when: disk_drive_rpm.rc == 0
-
-- name: Disk drive firmware Cleanup
-  yum: name={{ disk_drive_rpm.stdout }} state=absent
-  when: disk_drive_rpm.rc == 0
+- name: running generic tasks for all firmware things
+  include_tasks: firmware_installer.yml
+  with_items: "{{ fw_rpm.stdout_lines }}"
+  when: fw_rpm.rc == 0

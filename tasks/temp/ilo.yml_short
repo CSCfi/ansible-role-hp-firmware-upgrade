@@ -1,6 +1,0 @@
----
- - name: Identifying ILO device
-   shell: lspci -v | grep -i ilo -m 1 | awk '{print $NF}' | tr A-Z a-z
-   register: device 
-
- - include: firmware.yml 

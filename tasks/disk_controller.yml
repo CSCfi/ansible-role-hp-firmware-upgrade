@@ -4,31 +4,13 @@
 - modprobe: name=sg state=present
 
 - name: Identifying firmware RPM for disk controller device
-  shell: yum search `hpssacli ctrl all show config | grep -i smart -m 1| awk '{print $3}'` | grep -i `uname -m` | awk '{print $1}'
-  register: disk_controller_rpm 
+  shell: yum search `hpssacli ctrl all show config | grep -i smart -m 1| awk '{print $3}'` | grep -i `uname -m` | awk '{print $1;exit}'
+  register: fw_rpm
   changed_when: False
   ignore_errors: True
   check_mode: no
 
-- name: Installing firmware RPM for disk controller
-  yum: name={{ disk_controller_rpm.stdout }} state=latest
-  when: disk_controller_rpm.rc == 0
-
-- name: Firmware path lookup
-  shell: rpm -ql "{{ disk_controller_rpm.stdout }}" | grep '/hpsetup'
-  register: FirmwarePackage 
-  changed_when: false
-  when: disk_controller_rpm.rc == 0
-  check_mode: no
-
-- name: Store path to hpsetup installer
-  set_fact: firmware_installer="{{ FirmwarePackage.stdout }}"
-  when: disk_controller_rpm.rc == 0
-
-- include: firmware_installer.yml
-  when: disk_controller_rpm.rc == 0
-
-- name: Disk controller firmware Cleanup
-  yum: name={{ disk_controller_rpm.stdout }} state=absent
-  when: disk_controller_rpm.rc == 0
-
+- name: running generic tasks for all firmware things
+  include_tasks: firmware_installer.yml
+  with_items: "{{ fw_rpm.stdout_lines }}"
+  when: fw_rpm.rc == 0

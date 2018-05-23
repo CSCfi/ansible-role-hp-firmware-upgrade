@@ -1,16 +1,41 @@
 ---
+
 - name: Clearing previous log entries
-  shell: "> /var/cpq/Component.log"
-  ignore_errors: true
-  changed_when: false
-
-- name: Installing firmware in silent mode
-  command: "{{ firmware_installer }} -f -s "
+  file:
+    path: "/var/cpq/Component.log"
+    state: absent
   ignore_errors: true
 
-- name: Displaying Firmware installation logs
-  shell: "cat /var/cpq/Component.log"
-  register: InstallLog
-  changed_when: false
+- name: Installing firmware "{{ item }}"
+  yum: name={{ item | splitext | first }}  state=latest
 
-- debug: var=InstallLog.stdout_lines
+- name: extract path for hpsetup command
+  shell: "rpm -ql {{ item }}|grep /hpsetup"
+  register: FirmwarePackage
+  changed_when: False
+  check_mode: no
+
+- name:  set_fact for firmware_installer path from "{{ item }}" RPM
+  set_fact: firmware_installer="{{ FirmwarePackage.stdout | splitext | first }}"
+
+
+- name: Installing firmware from "{{ item }}"  in silent mode
+  command: "{{ firmware_installer }}  -s "
+  ignore_errors: true
+
+- name: Testing if log file exists
+  stat: path='/var/cpq/Component.log'
+  register: optional_file
+
+- name: Gather optional installer log for "{{ item }}"
+  command: "/bin/cat {{ optional_file.stat.path }}"
+  register: details
+  when: optional_file.stat.exists
+
+- name: Print optional installer log for "{{ item }}"
+  debug:
+  msg: "{{ details.stdout_lines }}"
+  when: details.rc == 0
+
+- name: Firmware RPM cleanup
+  package: name={{ item }} state=absent
