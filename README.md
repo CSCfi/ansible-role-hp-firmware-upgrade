@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/CSC-IT-Center-for-Science/ansible-role-hp-firmware-upgrade.svg?branch=master)](https://travis-ci.org/CSC-IT-Center-for-Science/ansible-role-hp-firmware-upgrade)
+[![Build Status](https://travis-ci.org/CSCfi/ansible-role-hp-firmware-upgrade.svg?branch=master)](https://travis-ci.org/CSCfi/ansible-role-hp-firmware-upgrade)
 
 ansible-role-hp-firmware-upgrade
 =========
@@ -12,6 +12,7 @@ Ansible role to upgrade HP system firmwares. List of components upgraded by this
 * Disk Drive
 * Intel Network Adapter
 * Mellanox Infiniband-ethernet Adapter (VPI)
+* Qlogic Network Adapter (nx2)
 
 Requirements
 ------------
@@ -27,12 +28,12 @@ You can customize your selection by editing ```defaults/main.yml```
 Installation
 ------------
 
-```$ ansible-galaxy install CSC-IT-Center-for-Science.hp-firmware-upgrade ```
+```$ ansible-galaxy install CSCfi.hp-firmware-upgrade ```
 
 Dependencies
 ------------
 
-The role ```CSC-IT-Center-for-Science.hp-firmware-upgrade``` must be installed.
+The role ```CSCfi.hp-firmware-upgrade``` must be installed.
 
 Example Playbook
 ----------------
@@ -41,7 +42,7 @@ Example Playbook
 ```
 - hosts: servers
   roles:
-     - { role: CSC-IT-Center-for-Science.hp-firmware-upgrade }
+     - { role: CSCfi.hp-firmware-upgrade }
 ```
 License
 -------

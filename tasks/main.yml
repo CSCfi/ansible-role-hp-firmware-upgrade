@@ -43,3 +43,8 @@
   tags:
    - mellanox-network-adapter
   when: upgrade_mellanox_network_adapter_firmware
+  
+- include_tasks: qlogic_network_adapter.yml
+  tags:
+   - qlogic-network-adapter
+  when: upgrade_qlogic_network_adapter_firmware

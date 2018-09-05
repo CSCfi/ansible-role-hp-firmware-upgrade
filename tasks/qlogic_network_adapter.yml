@@ -1,0 +1,14 @@
+---
+- assert: { that: "ansible_system_vendor == 'HP'" }
+
+- name: Identifying firmware RPM for Qlogic NX2
+  shell: "yum search firmware-nic-qlogic-nx2 | grep -i hpe |awk '{print $1;exit}'"
+  register: fw_rpm
+  changed_when: False
+  ignore_errors: True
+  check_mode: no
+
+- name: running generic tasks for all firmware things
+  include_tasks: firmware_installer.yml
+  with_items: "{{ fw_rpm.stdout_lines }}"
+  when: fw_rpm.rc == 0
