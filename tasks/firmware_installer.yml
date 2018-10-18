@@ -34,7 +34,7 @@
 
 - name: Print optional installer log for "{{ item }}"
   debug:
-  msg: "{{ details.stdout_lines }}"
+    msg: "{{ details.stdout_lines }}"
   when: details.rc == 0
 
 - name: Firmware RPM cleanup
