@@ -17,7 +17,7 @@
  - name: Getting ilo version
    set_fact: ilo_version={{ ilo_info.stdout.split('\"')[-2] |lower}}
 
- - assert: { that: ilo_version | match("ilo4") }
+ - assert: { that: ilo_version is match("ilo4") }
 
  - name: Identifying firmware for ILO
    shell: "yum search {{ ilo_version }} |grep -i firmware"
