@@ -6,6 +6,8 @@
 
  - name: Identifying firmware RPM for System ROM
    shell: "yum search {{systemrom.stdout}} system|grep HP |awk '{print $1;exit}'"
+   args:
+     warn: False
    register: fw_rpm
    changed_when: False
    ignore_errors: True
