@@ -1,0 +1,16 @@
+- name: Upgrade HP Firmware
+  hosts: all
+  vars:
+    upgrade_ilo_firmware: False
+    upgrade_system_rom_firmware: False
+    upgrade_disk_controller_firmware: False
+    upgrade_disk_drive_firmware: False
+    upgrade_power_management_controller_firmware: False
+    upgrade_intel_network_adapter_firmware: False
+    upgrade_mellanox_network_adapter_firmware: False
+    upgrade_qlogic_network_adapter_firmware: False
+
+
+  roles:
+    - role: hp-firmware-upgrade
+
