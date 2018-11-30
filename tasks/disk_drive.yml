@@ -9,6 +9,16 @@
   register: fw_rpm
   changed_when: false
   ignore_errors: yes
+  when: hp_gen == 9
+
+- name: Identifying firmware RPM for disk drives
+  shell: "yum search `ssacli ctrl all show config detail | grep 'Model:' |grep -E '(ATA|HP)' | sort -u| awk '{print $NF}'` | grep -i firmware-hdd | awk '{print $1}' | grep `uname  -m`"
+  args:
+    warn: False
+  register: fw_rpm
+  changed_when: false
+  ignore_errors: yes
+  when: hp_gen == 8
 
 - name: running generic tasks for all firmware things
   include_tasks: firmware_installer.yml
