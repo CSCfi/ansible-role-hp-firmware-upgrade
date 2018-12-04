@@ -1,0 +1,9 @@
+---
+- name: Identify HP Gen arch version
+  shell: hpasmcli -s "show server" | grep System | awk '{print $5;exit}'
+  register: hp_gen
+  changed_when: False
+  check_mode: no
+
+- debug:
+    msg: "HP Gen Version = {{ hp_gen }}"

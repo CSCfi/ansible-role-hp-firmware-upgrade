@@ -19,6 +19,9 @@ Requirements
 
 * The machine where firmware upgrade is taking place:
     * Yum must be configured to access [Firmware Upgrade for Proliant repository] (https://downloads.linux.hpe.com/SDR/project/fwpp/)
+* Supported system:
+    * HP Proliant Gen8
+    * HP Proliant Gen9
 
 Role Variables
 --------------

@@ -1,14 +1,14 @@
 ---
-- name: Installing required packages like hp-scripting-tools and hpssacli
-  package: name={{ item }} state=latest
-  with_items:
-    - hp-scripting-tools
-    - hpssacli
-  when: hp_gen == 9
-
 - name: Installing required packages like hp-scripting-tools and ssacli
   package: name={{ item }} state=latest
   with_items:
     - hp-scripting-tools
     - ssacli
-  when: hp_gen == 8
+  when: hp_gen == "Gen8"
+
+- name: Installing required packages like hp-scripting-tools and hpssacli
+  package: name={{ item }} state=latest
+  with_items:
+    - hp-scripting-tools
+    - hpssacli
+  when: hp_gen == "Gen9"

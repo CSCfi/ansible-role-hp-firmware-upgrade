@@ -4,16 +4,6 @@
 - modprobe: name=sg state=present
 
 - name: Identifying firmware RPM for disk controller device
-  shell: yum search `hpssacli ctrl all show config | grep -i smart -m 1| awk '{print $3}'` | grep -i `uname -m` | awk '{print $1;exit}'
-  args:
-    warn: False
-  register: fw_rpm
-  changed_when: False
-  ignore_errors: True
-  check_mode: no
-  when: hp_gen == 9
-
-- name: Identifying firmware RPM for disk controller device
   shell: yum search `ssacli ctrl all show config | grep -i smart -m 1| awk '{print $3}'` | grep -i `uname -m` | awk '{print $1;exit}'
   args:
     warn: False
@@ -21,7 +11,17 @@
   changed_when: False
   ignore_errors: True
   check_mode: no
-  when: hp_gen == 8
+  when: hp_gen == "Gen8"
+
+- name: Identifying firmware RPM for disk controller device
+  shell: yum search `hpssacli ctrl all show config | grep -i smart -m 1| awk '{print $3}'` | grep -i `uname -m` | awk '{print $1;exit}'
+  args:
+    warn: False
+  register: fw_rpm
+  changed_when: False
+  ignore_errors: True
+  check_mode: no
+  when: hp_gen == "Gen9"
 
 - name: running generic tasks for all firmware things
   include_tasks: firmware_installer.yml
