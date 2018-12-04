@@ -31,12 +31,11 @@ You can customize your selection by editing ```defaults/main.yml```
 Installation
 ------------
 
-```$ ansible-galaxy install FLiPp3r90.hp-firmware-upgrade ```
 
 Dependencies
 ------------
 
-The role ```FLiPp3r90.hp-firmware-upgrade``` must be installed.
+The role must be installed.
 
 Example Playbook
 ----------------
@@ -45,7 +44,7 @@ Example Playbook
 ```
 - hosts: servers
   roles:
-     - { role: FLiPp3r90.hp-firmware-upgrade }
+     - { role: hp-firmware-upgrade }
 ```
 License
 -------
