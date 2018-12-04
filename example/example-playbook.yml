@@ -9,8 +9,5 @@
     upgrade_intel_network_adapter_firmware: False
     upgrade_mellanox_network_adapter_firmware: False
     upgrade_qlogic_network_adapter_firmware: False
-
-
-  roles:
-    - role: hp-firmware-upgrade
-
+  tasks:
+    - include_tasks: ../roles/hp-firmware-upgrade/tasks/main.yml
