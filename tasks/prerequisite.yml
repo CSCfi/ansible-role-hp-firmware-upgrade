@@ -1,6 +1,28 @@
 ---
-- name: Installing required packages like hp-scripting-tools and hpssacli
+- name: Identify HP model version
+  set_fact:
+    hp_gen: "{{ ansible_product_name.split(' ')[2] | lower }}"
+
+- debug:
+    msg: "HP model version is: {{ hp_gen }}"
+
+- name: Set HP storage controller utility to ssacli
+  set_fact:
+    ss_utility: "ssacli"
+  when:
+    - (hp_gen == "g7") or (hp_gen == "gen8")
+
+- name: Set HP storage controller utility hpssacli
+  set_fact:
+    ss_utility: "hpssacli"
+  when:
+    - hp_gen == "gen9"
+
+- debug:
+    msg: "{{ ss_utility }}"
+
+- name: 'Installing required packages like hp-scripting-tools and "{{ ss_utility }}"'
   package: name={{ item }} state=latest
   with_items:
     - hp-scripting-tools
-    - hpssacli
+    - "{{ ss_utility }}"
