@@ -11,6 +11,8 @@
 
 - name: extract path for hpsetup command
   shell: "rpm -ql {{ item }}|grep /hpsetup"
+  args:
+    warn: False
   register: FirmwarePackage
   changed_when: False
   check_mode: no

@@ -10,6 +10,8 @@
 
 - name: Identifying firmware RPM for Qlogic NX2
   shell: "yum search firmware-nic-qlogic-nx2 | grep -i hpe |awk '{print $1;exit}'"
+  args:
+    warn: False
   register: fw_rpm
   changed_when: False
   ignore_errors: True

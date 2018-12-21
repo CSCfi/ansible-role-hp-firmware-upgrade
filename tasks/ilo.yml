@@ -21,6 +21,8 @@
 
  - name: Identifying firmware for ILO
    shell: "yum search {{ ilo_version }} |grep -i firmware"
+   args:
+     warn: False
    register: fw_rpm
    changed_when: False
    ignore_errors: True
