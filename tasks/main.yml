@@ -12,7 +12,8 @@
 - include_tasks: ilo.yml
   tags:
     - ilo
-  when: upgrade_ilo_firmware
+  when:
+    - upgrade_ilo_firmware
 
 - include_tasks: system_rom.yml
   tags:
@@ -43,7 +44,7 @@
   tags:
    - mellanox-network-adapter
   when: upgrade_mellanox_network_adapter_firmware
-  
+
 - include_tasks: qlogic_network_adapter.yml
   tags:
    - qlogic-network-adapter

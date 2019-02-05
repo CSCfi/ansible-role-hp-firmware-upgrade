@@ -25,4 +25,5 @@
   package: name={{ item }} state=latest
   with_items:
     - hp-scripting-tools
+    - hponcfg
     - "{{ ss_utility }}"
