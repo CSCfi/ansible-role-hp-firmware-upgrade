@@ -10,7 +10,7 @@
   yum: name={{ item | splitext | first }}  state=latest
 
 - name: extract path for hpsetup command
-  shell: "rpm -ql {{ item }}|grep /hpsetup"
+  shell: "rpm -ql {{ item }}|grep -i hpsetup"
   args:
     warn: False
   register: FirmwarePackage
