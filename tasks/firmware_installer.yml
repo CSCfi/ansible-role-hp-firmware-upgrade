@@ -10,7 +10,7 @@
   yum: name={{ item | splitext | first }}  state=latest
 
 - name: extract path for hpsetup command
-  shell: "rpm -ql {{ item }}|grep -i hpsetup"
+  shell: "rpm -ql {{ item }}|grep -i 'hpsetup'"
   args:
     warn: False
   register: FirmwarePackage
@@ -19,7 +19,6 @@
 
 - name:  set_fact for firmware_installer path from "{{ item }}" RPM
   set_fact: firmware_installer="{{ FirmwarePackage.stdout | splitext | first }}"
-
 
 - name: Installing firmware from "{{ item }}"  in silent mode
   command: "{{ firmware_installer }}  -s "
