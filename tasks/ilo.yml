@@ -15,7 +15,7 @@
    # using the python split fuction on the '"' character and the 2nd from last
    # element of the resulting array. "|lower" is a Jinja2 filter
  - name: Getting ilo version
-   set_fact: ilo_version={{ ilo_info.stdout.split('\"')[-2] |lower}}
+   set_fact: ilo_version={{ ilo_info.stdout.split('\"')[-2] |lower }}
 
  - assert: { that: ilo_version is match("ilo4") }
 

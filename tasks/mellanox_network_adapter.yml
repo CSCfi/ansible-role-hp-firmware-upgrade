@@ -25,7 +25,7 @@
   check_mode: no
   when: ConnectX3_device.rc == 0
 
-- name: running generic tasks for all firmware things for "{{fw_rpm}}"
+- name: running generic tasks for all firmware things for "{{ fw_rpm }}"
   include_tasks: firmware_installer.yml
   with_items: "{{ fw_rpm.stdout_lines }}"
   ignore_errors: True
@@ -39,7 +39,7 @@
   check_mode: no
   when: ConnectX4_device.rc == 0
 
-- name: running generic tasks for all firmware things for "{{fw_rpm}}"
+- name: running generic tasks for all firmware things for "{{ fw_rpm }}"
   include_tasks: firmware_installer.yml
   with_items: "{{ fw_rpm.stdout_lines }}"
   ignore_errors: True

@@ -5,7 +5,7 @@
    check_mode: no
 
  - name: Identifying firmware RPM for System ROM
-   shell: "yum search {{systemrom.stdout}} |grep HP |grep firmware |awk '{print $1;exit}'|grep 'firmware-system'"
+   shell: "yum search {{ systemrom.stdout }} |grep HP |grep firmware |awk '{print $1;exit}'|grep 'firmware-system'"
    args:
      warn: False
    register: fw_rpm
@@ -13,7 +13,7 @@
    ignore_errors: True
    check_mode: no
 
- - name: running generic tasks for all firmware things for  {{systemrom}}
+ - name: running generic tasks for all firmware things for {{ systemrom }}
    include_tasks: firmware_installer.yml
    with_items: "{{ fw_rpm.stdout_lines }}"
    when: fw_rpm.rc == 0
