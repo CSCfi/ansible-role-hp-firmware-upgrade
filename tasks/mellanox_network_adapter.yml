@@ -1,5 +1,6 @@
 ---
-- assert: { that: "ansible_system_vendor == 'HP'" }
+- name: assert that we only run on HP
+  assert: { that: "ansible_system_vendor == 'HP'" }
 
 - name: Checking for connectx-3 device
   shell: "lspci |grep -i  ConnectX-3"

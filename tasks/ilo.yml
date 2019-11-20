@@ -1,10 +1,12 @@
 ---
 # vim:ft=ansible:
 
- - assert: { that: "ansible_system_vendor == 'HP'" }
+ - name: assert that we only run on HP
+   assert: { that: "ansible_system_vendor == 'HP'" }
 
    # We look for:
-   # 01:00.0 "System peripheral" "Hewlett-Packard Company" "Integrated Lights-Out Standard Slave Instrumentation & System Support" -r05 "Hewlett-Packard Company" "iLO4"
+   # 01:00.0 "System peripheral" "Hewlett-Packard Company"
+   #  "Integrated Lights-Out Standard Slave Instrumentation & System Support" -r05 "Hewlett-Packard Company" "iLO4"
  - name: Checking for ILO device
    command: lspci -s 01:00.0 -m
    register: ilo_info

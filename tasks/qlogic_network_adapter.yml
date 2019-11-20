@@ -1,5 +1,6 @@
 ---
-- assert: { that: "ansible_system_vendor == 'HP'" }
+- name: assert that we only run on HP
+  assert: { that: "ansible_system_vendor == 'HP'" }
 
 - name: Use lspci to look for BroadCom NX2 devices
   shell: "lspci |grep -i  'NetXtreme II'"
