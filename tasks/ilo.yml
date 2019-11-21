@@ -1,10 +1,12 @@
 ---
 # vim:ft=ansible:
 
- - assert: { that: "ansible_system_vendor == 'HP'" }
+ - name: assert that we only run on HP
+   assert: { that: "ansible_system_vendor == 'HP'" }
 
    # We look for:
-   # 01:00.0 "System peripheral" "Hewlett-Packard Company" "Integrated Lights-Out Standard Slave Instrumentation & System Support" -r05 "Hewlett-Packard Company" "iLO4"
+   # 01:00.0 "System peripheral" "Hewlett-Packard Company"
+   #  "Integrated Lights-Out Standard Slave Instrumentation & System Support" -r05 "Hewlett-Packard Company" "iLO4"
  - name: Checking for ILO device
    command: lspci -s 01:00.0 -m
    register: ilo_info
@@ -15,7 +17,7 @@
    # using the python split fuction on the '"' character and the 2nd from last
    # element of the resulting array. "|lower" is a Jinja2 filter
  - name: Getting ilo version
-   set_fact: ilo_version={{ ilo_info.stdout.split('\"')[-2] |lower}}
+   set_fact: ilo_version={{ ilo_info.stdout.split('\"')[-2] |lower }}
 
  - assert: { that: ilo_version is match("ilo4") }
 
