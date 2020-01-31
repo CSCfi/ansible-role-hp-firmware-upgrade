@@ -20,28 +20,26 @@
   shell: yum search mellanox eth-ib |grep -i vpi|awk '{print $1;exit}'
   args:
     warn: False
-  register: fw_rpm
+  register: fw_rpm_x3
   changed_when: False
   ignore_errors: True
   check_mode: no
   when: ConnectX3_device.rc == 0
 
-- name: running generic tasks for all firmware things for "{{ fw_rpm }}"
+- name: running generic tasks for all firmware things for "{{ fw_rpm_x3 }}"
   include_tasks: firmware_installer.yml
-  with_items: "{{ fw_rpm.stdout_lines }}"
-  ignore_errors: True
-  when: fw_rpm.rc == 0 and ConnectX3_device.rc == 0
+  with_items: "{{ fw_rpm.stdout_lines | default([]) }}"
+  when: fw_rpm_x3.rc == 0 and ConnectX3_device.rc == 0
 
 - name: Identifying firmware RPM for Mellanox Network Adapter for ConnectX-4 ethernet and infiniband
   shell:  yum search mellanox connectx4 |grep -i  vpi |awk '{print $1;exit}'
-  register: fw_rpm
+  register: fw_rpm_x4
   changed_when: False
   ignore_errors: True
   check_mode: no
   when: ConnectX4_device.rc == 0
 
-- name: running generic tasks for all firmware things for "{{ fw_rpm }}"
+- name: running generic tasks for all firmware things for "{{ fw_rpm_x4 }}"
   include_tasks: firmware_installer.yml
-  with_items: "{{ fw_rpm.stdout_lines }}"
-  ignore_errors: True
-  when: fw_rpm.rc == 0 and ConnectX4_device.rc == 0
+  with_items: "{{ fw_rpm_x4.stdout_lines | default([]) }}"
+  when: fw_rpm_x4.rc == 0 and ConnectX4_device.rc == 0
