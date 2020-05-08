@@ -22,7 +22,7 @@
  - assert: { that: ilo_version is match("ilo4") }
 
  - name: Identifying firmware for ILO
-   shell: "yum search {{ ilo_version }} |grep -i firmware"
+   shell: "yum list | grep firmware-{{ ilo_version }} | sort -n +1 -2 | tail -1 | awk '{print $NR}'"
    args:
      warn: False
    register: fw_rpm
