@@ -1,5 +1,4 @@
 ---
-
 - name: Clearing previous log entries
   file:
     path: "/var/cpq/Component.log"
@@ -20,7 +19,6 @@
 - name:  set_fact for firmware_installer path from "{{ item }}" RPM
   set_fact: firmware_installer="{{ FirmwarePackage.stdout | splitext | first }}"
 
-
 - name: Installing firmware from "{{ item }}"  in silent mode
   command: "{{ firmware_installer }}  -s "
   ignore_errors: true
@@ -39,5 +37,5 @@
     msg: "{{ details.stdout_lines }}"
   when: details.rc == 0
 
-- name: Firmware RPM cleanup
-  package: name={{ item }} state=absent
+- name: Firmware RPM cleanup {{ item }}
+  package: name={{ item | splitext | first }} state=absent
