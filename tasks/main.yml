@@ -5,6 +5,7 @@
     - system-rom
     - disk-controller
     - disk-drive
+    - disk-backplane-expander
     - power-management-controller
     - intel-network-adapter
     - mellanox-network-adapter
@@ -28,6 +29,11 @@
   tags:
    - disk-drive
   when: upgrade_disk_drive_firmware|bool
+
+- include_tasks: disk_backplane_expander.yml
+  tags:
+   - disk-backplane-expander
+  when: upgrade_disk_backplane_expander|bool
 
 - include_tasks: power_management_controller.yml
   tags:
