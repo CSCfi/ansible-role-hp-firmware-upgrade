@@ -1,0 +1,19 @@
+---
+- name: assert that we only run on HP
+  assert: { that: "ansible_system_vendor == 'HP'" }
+
+- name: Identifying firmware RPM for Disk backplane expander
+  shell: >
+    yum search `{{ ss_utility }} ctrl all show config 
+    | grep Enclosure -m 1| awk '{print $8}'`
+    | grep -i `uname -m` | awk '{print $1;exit}'
+  args:
+    warn: False
+  register: fw_rpm
+  changed_when: false
+  ignore_errors: yes
+
+- name: running generic tasks for all firmware things
+  include_tasks: firmware_installer.yml
+  with_items: "{{ fw_rpm.stdout_lines }}"
+  when: fw_rpm.rc == 0
