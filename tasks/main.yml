@@ -1,5 +1,6 @@
 ---
-- include_tasks: prerequisite.yml
+- name: Configure the prequisite tasks 
+  include_tasks: prerequisite.yml
   tags:
     - ilo
     - system-rom
@@ -10,47 +11,83 @@
     - intel-network-adapter
     - mellanox-network-adapter
 
-- include_tasks: ilo.yml
+- name: Run tasks for ILO4 firmware (gen8 and gen9)
+  include_tasks: ilo.yml
   tags:
     - ilo
-  when: upgrade_ilo_firmware|bool
+  when: |
+    upgrade_ilo_firmware and
+    (hp_gen == "gen8") or (hp_gen == "gen9")
 
-- include_tasks: system_rom.yml
+- name: Run tasks for system ROM firmware (gen8 and gen9)
+  include_tasks: system_rom.yml
   tags:
    - system-rom
-  when: upgrade_system_rom_firmware|bool
+  when: |
+    upgrade_system_rom_firmware and
+    (hp_gen == "gen8") or (hp_gen == "gen9")
 
-- include_tasks: disk_controller.yml
+- name: Run tasks for disk controller firmware (gen8 and gen9)
+  include_tasks: disk_controller.yml
   tags:
    - disk-controller
-  when: upgrade_disk_controller_firmware|bool
+  when: |
+    upgrade_disk_controller_firmware and
+    (hp_gen == "gen8") or (hp_gen == "gen9")
 
-- include_tasks: disk_drive.yml
+- name: Run tasks for disk drive firmware (gen8 and gen9)
+  include_tasks: disk_drive.yml
   tags:
    - disk-drive
-  when: upgrade_disk_drive_firmware|bool
+  when: |
+    upgrade_disk_drive_firmware and
+    (hp_gen == "gen8") or (hp_gen == "gen9")
 
-- include_tasks: disk_backplane_expander.yml
+- name: Run tasks for backplane expander firmware (gen8 and gen9)
+  include_tasks: disk_backplane_expander.yml
   tags:
    - disk-backplane-expander
-  when: upgrade_disk_backplane_expander|bool
+  when: |
+    upgrade_disk_controller_firmware and
+    (hp_gen == "gen8") or (hp_gen == "gen9")
 
-- include_tasks: power_management_controller.yml
+- name: Run tasks for power management controller firmware (gen8 and gen9)
+  include_tasks: power_management_controller.yml
   tags:
    - power-management-controller
-  when: upgrade_power_management_controller_firmware|bool
+  when: |
+    upgrade_disk_controller_firmware and
+    (hp_gen == "gen8") or (hp_gen == "gen9")
 
-- include_tasks: intel_network_adapter.yml
+- name: Run tasks forn Intel NIC firmware (gen8 and gen9)
+  include_tasks: intel_network_adapter.yml
   tags:
    - intel-network-adapter
-  when: upgrade_intel_network_adapter_firmware|bool
+  when: |
+    upgrade_disk_controller_firmware and
+    (hp_gen == "gen8") or (hp_gen == "gen9")
 
-- include_tasks: mellanox_network_adapter.yml
+- name: Run tasks for Mellanox NIC firmware (gen8 and gen9)
+  include_tasks: mellanox_network_adapter.yml
   tags:
    - mellanox-network-adapter
-  when: upgrade_mellanox_network_adapter_firmware|bool
+  when: |
+    upgrade_disk_controller_firmware and
+    (hp_gen == "gen8") or (hp_gen == "gen9")
 
-- include_tasks: qlogic_network_adapter.yml
+- name: Run tasks for qlogic NIC firmware (gen8 and gen9)
+  include_tasks: qlogic_network_adapter.yml
   tags:
    - qlogic-network-adapter
-  when: upgrade_qlogic_network_adapter_firmware|bool
+  when: |
+    upgrade_disk_controller_firmware and
+    (hp_gen == "gen8") or (hp_gen == "gen9")
+
+- name: Install gen10 firmwares
+  include_tasks: gen10_firmwares.yml
+  with_items: "{{ firmware_list }}"
+  when: |
+    ansible_system_vendor == 'HPE' and
+    ansible_os_family == 'RedHat' and
+    ansible_distribution_major_version == "8" and
+    hp_gen == "gen10"

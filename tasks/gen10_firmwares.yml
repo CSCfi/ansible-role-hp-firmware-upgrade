@@ -1,0 +1,21 @@
+---
+- name: Choose repository for the firmware
+  set_fact: hp_repository={{ item.hp_repository }}
+  
+- name: Identifying firmware for {{ item.upgrade_target }}
+  shell: "dnf list --enablerepo={{ item.hp_repository }} {{ item.firmware }} | tail -1 | awk '{print $NR}'"
+  args:
+    warn: False
+  register: fw_rpm
+  changed_when: False
+  ignore_errors: True
+  check_mode: False
+
+- name: Check the permission to upgrade
+  set_fact: upgrade={{ item.upgrade }}
+ 
+- name: Starting firmware installer for items in "{{ fw_rpm.stdout_lines }}"
+  include_tasks: firmware_installer.yml
+  when: |
+    fw_rpm.rc == 0 and
+    upgrade
