@@ -8,7 +8,7 @@
    # 01:00.0 "System peripheral" "Hewlett-Packard Company"
    #  "Integrated Lights-Out Standard Slave Instrumentation & System Support" -r05 "Hewlett-Packard Company" "iLO4"
  - name: Checking for ILO device
-   command: lspci -s 01:00.0 -m
+   shell: "lspci -m | grep 'Lights-Out' |grep iLO"
    register: ilo_info
    changed_when: False
    check_mode: no
@@ -19,9 +19,9 @@
  - name: Getting ilo version
    set_fact: ilo_version={{ ilo_info.stdout.split('\"')[-2] |lower }}
 
- - assert: { that: ilo_version is match("ilo4") }
+ - assert: { that: "ilo_version == 'ilo4'" }
 
- - name: Identifying firmware for ILO
+ - name: Identifying firmware for ILO4
    shell: "yum list | grep firmware-{{ ilo_version }} | sort -n +1 -2 | tail -1 | awk '{print $NR}'"
    args:
      warn: False
@@ -29,8 +29,8 @@
    changed_when: False
    ignore_errors: True
    check_mode: no
+   when: ilo_version == 'ilo4'
 
- - name: Starting firmware installer loop for items in "{{ fw_rpm.stdout_lines }}"
+ - name: Starting firmware installer for in "{{ fw_rpm.stdout_lines }}"
    include_tasks: firmware_installer.yml
-   with_items: "{{ fw_rpm.stdout_lines }}"
    when: fw_rpm.rc == 0
