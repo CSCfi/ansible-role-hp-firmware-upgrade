@@ -1,5 +1,5 @@
 ---
-- name: Configure the prequisite tasks 
+- name: Configure the prerequisite tasks 
   include_tasks: prerequisite.yml
   tags:
     - ilo
@@ -16,7 +16,7 @@
   tags:
     - ilo
   when: |
-    upgrade_ilo_firmware and
+    upgrade_ilo and
     (hp_gen == "gen8") or (hp_gen == "gen9")
 
 - name: Run tasks for system ROM firmware (gen8 and gen9)
@@ -24,7 +24,7 @@
   tags:
    - system-rom
   when: |
-    upgrade_system_rom_firmware and
+    upgrade_system_rom and
     (hp_gen == "gen8") or (hp_gen == "gen9")
 
 - name: Run tasks for disk controller firmware (gen8 and gen9)
@@ -32,7 +32,7 @@
   tags:
    - disk-controller
   when: |
-    upgrade_disk_controller_firmware and
+    upgrade_disk_controller and
     (hp_gen == "gen8") or (hp_gen == "gen9")
 
 - name: Run tasks for disk drive firmware (gen8 and gen9)
@@ -40,7 +40,7 @@
   tags:
    - disk-drive
   when: |
-    upgrade_disk_drive_firmware and
+    upgrade_disk_drive and
     (hp_gen == "gen8") or (hp_gen == "gen9")
 
 - name: Run tasks for backplane expander firmware (gen8 and gen9)
@@ -48,7 +48,7 @@
   tags:
    - disk-backplane-expander
   when: |
-    upgrade_disk_controller_firmware and
+    upgrade_disk_backplane_expander and
     (hp_gen == "gen8") or (hp_gen == "gen9")
 
 - name: Run tasks for power management controller firmware (gen8 and gen9)
@@ -56,7 +56,7 @@
   tags:
    - power-management-controller
   when: |
-    upgrade_disk_controller_firmware and
+    upgrade_power_management_controller and
     (hp_gen == "gen8") or (hp_gen == "gen9")
 
 - name: Run tasks forn Intel NIC firmware (gen8 and gen9)
@@ -64,7 +64,7 @@
   tags:
    - intel-network-adapter
   when: |
-    upgrade_disk_controller_firmware and
+    upgrade_intel_nic and
     (hp_gen == "gen8") or (hp_gen == "gen9")
 
 - name: Run tasks for Mellanox NIC firmware (gen8 and gen9)
@@ -72,7 +72,7 @@
   tags:
    - mellanox-network-adapter
   when: |
-    upgrade_disk_controller_firmware and
+    upgrade_mellanox_nic and
     (hp_gen == "gen8") or (hp_gen == "gen9")
 
 - name: Run tasks for qlogic NIC firmware (gen8 and gen9)
@@ -80,7 +80,7 @@
   tags:
    - qlogic-network-adapter
   when: |
-    upgrade_disk_controller_firmware and
+    upgrade_qlogic_nic and
     (hp_gen == "gen8") or (hp_gen == "gen9")
 
 - name: Install gen10 firmwares

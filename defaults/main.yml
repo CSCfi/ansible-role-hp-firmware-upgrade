@@ -1,12 +1,12 @@
 ---
 # defaults file for ansible-role-hp-firmware-upgrade
 
-upgrade_ilo_firmware: True
-upgrade_system_rom_firmware: True
-upgrade_disk_controller_firmware: True
-upgrade_disk_drive_firmware: True
+upgrade_ilo: True
+upgrade_system_rom: True
+upgrade_disk_controller: True
+upgrade_disk_drive: True
 upgrade_disk_backplane_expander: True
-upgrade_power_management_controller_firmware: True
-upgrade_intel_network_adapter_firmware: True
-upgrade_mellanox_network_adapter_firmware: True
-upgrade_qlogic_network_adapter_firmware: True
+upgrade_power_management_controller: True
+upgrade_intel_nic: True
+upgrade_mellanox_nic: True
+upgrade_qlogic_nic: True
