@@ -21,13 +21,27 @@
 - debug:
     msg: "{{ ss_utility }}"
 
+- name: Check that the repos exists
+  stat:
+    path: '/etc/yum.repos.d/{{ item }}'
+  with_items:
+    - "rhel-mc.repo"
+    - "epel-mc.repo"
+    - "redhat.repo"
+  register: stat_result
+
+- debug:
+    msg: "Repo file exists..."
+  when: stat_result.stat.exists
+
+- debug:
+    msg: "Repo file not found"
+  when: not stat_result.stat.exists  
+
 - name: Install requirement packages
   package:
     name: "{{ item.name }}"
     enablerepo: "{{ item.repo }}"
     state: latest
-  with_items: 
-    - {name: "{{ ss_utility }}", repo: spp}
-    - {name: hp-scripting-tools, repo: stk}
-    - {name: pciutils, repo: }
-
+  loop: "{{ requirement_pkgs }}"  
+  when: requirement_pkgs is defined

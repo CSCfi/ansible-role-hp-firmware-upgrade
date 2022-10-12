@@ -90,4 +90,4 @@
     ansible_system_vendor == 'HPE' and
     ansible_os_family == 'RedHat' and
     ansible_distribution_major_version == "8" and
-    hp_gen == "gen10"
+    hp_gen == "gen10" and firmware_list is defined
