@@ -5,6 +5,7 @@ requirement_pkgs:
 - {name: hp-scripting-tools, repo: stk}
 - {name: pciutils, repo: }
 
+install_requirements: False
 upgrade_ilo: True
 upgrade_system_rom: True
 upgrade_disk_controller: True
