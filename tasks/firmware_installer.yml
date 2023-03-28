@@ -7,28 +7,28 @@
 
 - name: Installing firmware "{{ item }}"
   yum: name={{ item | splitext | first }}  state=latest
-  when: hp_gen == "gen8" or hp_gen == "gen9"
+  when: hp_gen != "gen10"
 
-- name: Installing firmware "{{ fw_rpm.stdout }}"
+- name: Installing firmware "{{ item }}" for Gen10
   dnf: 
-    name: "{{ fw_rpm.stdout }}"
+    name: "{{ item }}"
     enablerepo: "{{ hp_repository }}"
     update_cache: yes
     state: latest
   when: hp_gen == "gen10"
 
 - name: extract path for hpsetup command
-  shell: "rpm -ql {{ fw_rpm.stdout }}|grep /hpsetup"
+  shell: "rpm -ql {{ item }}|grep /hpsetup"
   args:
     warn: False
   register: FirmwarePackage
   changed_when: False
   check_mode: false
 
-- name:  set_fact for firmware_installer path from "{{ fw_rpm.stdout }}" RPM
+- name:  set_fact for firmware_installer path from "{{ item }}" RPM
   set_fact: firmware_installer="{{ FirmwarePackage.stdout | splitext | first }}"
 
-- name: Installing firmware from "{{ fw_rpm.stdout }}"  in silent mode
+- name: Installing firmware from "{{ item }}"  in silent mode
   command: "{{ firmware_installer }}  -s "
   ignore_errors: true
 
@@ -36,22 +36,15 @@
   stat: path='/var/cpq/Component.log'
   register: optional_file
 
-- name: Gather optional installer log for "{{ fw_rpm.stdout }}"
+- name: Gather optional installer log for "{{ item }}"
   command: "/bin/cat {{ optional_file.stat.path }}"
   register: details
   when: optional_file.stat.exists
 
-- name: Print optional installer log for "{{ fw_rpm.stdout }}"
+- name: Print optional installer log for "{{ item }}"
   debug:
     msg: "{{ details.stdout_lines }}"
   when: details.rc == 0
 
 - name: Firmware RPM cleanup {{ item }}
   package: name={{ item | splitext | first }} state=absent
-  when: hp_gen == "gen8" or hp_gen == "gen9"
-
-- name: Firmware RPM cleanup {{ fw_rpm.stdout }}
-  package:
-    name: "{{ fw_rpm.stdout }}"
-    state: absent
-  when: hp_gen == "gen10"
