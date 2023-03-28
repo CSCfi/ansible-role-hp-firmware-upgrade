@@ -21,10 +21,17 @@
 - debug:
     msg: "{{ ss_utility }}"
 
-- name: Install requirement packages
+- name: 'Installing required packages like hp-scripting-tools and "{{ ss_utility }}"'
+  package: name={{ item }} state=latest
+  with_items:
+    - hp-scripting-tools
+    - "{{ ss_utility }}"
+  when: hp_gen != "gen10"
+
+- name: Install requirement packages for Gen10
   package:
     name: "{{ item.name }}"
     enablerepo: "{{ item.repo }}"
     state: latest
   loop: "{{ requirement_pkgs }}"  
-  when: install_requirements|bool
+  when: install_requirements|bool and hp_gen == "gen10"
