@@ -33,4 +33,5 @@
 
  - name: Starting firmware installer for in "{{ fw_rpm.stdout_lines }}"
    include_tasks: firmware_installer.yml
+   with_items: "{{ fw_rpm.stdout_lines }}"
    when: fw_rpm.rc == 0

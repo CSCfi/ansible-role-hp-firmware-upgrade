@@ -5,6 +5,10 @@
     state: absent
   ignore_errors: true
 
+- name: Installing firmware "{{ item }}"
+  yum: name={{ item | splitext | first }}  state=latest
+  when: hp_gen == "gen8" or hp_gen == "gen9"
+
 - name: Installing firmware "{{ fw_rpm.stdout }}"
   dnf: 
     name: "{{ fw_rpm.stdout }}"
