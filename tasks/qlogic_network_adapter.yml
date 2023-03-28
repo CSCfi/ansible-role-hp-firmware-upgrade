@@ -21,4 +21,5 @@
 
 - name: running generic tasks for all firmware things
   include_tasks: firmware_installer.yml
+  with_items: "{{ fw_rpm.stdout_lines | default([]) }}"
   when: fw_rpm.rc == 0 and NX2_device.rc == 0

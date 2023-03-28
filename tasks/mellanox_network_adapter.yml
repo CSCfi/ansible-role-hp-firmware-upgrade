@@ -42,5 +42,6 @@
 
 - name: running generic tasks for all firmware things for "{{ fw_rpm.stdout }}"
   include_tasks: firmware_installer.yml
+  with_items: "{{ fw_rpm.stdout_lines }}"
   ignore_errors: True
   when: fw_rpm.rc == 0 and ConnectX4_device.rc == 0
