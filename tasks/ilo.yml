@@ -28,7 +28,7 @@
    register: fw_rpm
    changed_when: False
    ignore_errors: True
-   check_mode: no
+   check_mode: false
    when: ilo_version == 'ilo4'
 
  - name: Starting firmware installer for in "{{ fw_rpm.stdout_lines }}"
