@@ -46,5 +46,12 @@
     msg: "{{ details.stdout_lines }}"
   when: details.rc == 0
 
+- name: Firmware RPM cleanup {{ item }}
+  package: name={{ item | splitext | first }} state=absent
+  when: hp_gen == "gen8" or hp_gen == "gen9"
+
 - name: Firmware RPM cleanup {{ fw_rpm.stdout }}
-  command: "dnf remove {{ fw_rpm.stdout }} -y"
+  package:
+    name: "{{ fw_rpm.stdout }}"
+    state: absent
+  when: hp_gen == "gen10"
