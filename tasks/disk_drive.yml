@@ -2,9 +2,6 @@
 - name: assert that we only run on HP
   assert: { that: "ansible_system_vendor == 'HP' or 'HPE'" }
 
-- name: Choose repository for the firmware
-  set_fact: hp_repository={{ item.hp_repository }}
-
 #following expects that your system has only same type disks on thats why this incredible stupid hack
 - name: Identifying firmware RPM for disk drives
   shell: >
