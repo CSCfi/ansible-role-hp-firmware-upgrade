@@ -1,6 +1,6 @@
 ---
 - name: assert that we only run on HP
-  assert: { that: "ansible_system_vendor == 'HP'" }
+  assert: { that: "ansible_system_vendor == 'HP' or 'HPE'" }
 
 #following expects that your system has only same type disks on thats why this incredible stupid hack
 - name: Identifying firmware RPM for disk drives
@@ -14,7 +14,8 @@
     warn: False
   register: fw_rpm
   changed_when: false
-  ignore_errors: yes
+  ignore_errors: true
+  check_mode: false
 
 - name: running generic tasks for all firmware things
   include_tasks: firmware_installer.yml

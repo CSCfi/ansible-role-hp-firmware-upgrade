@@ -1,12 +1,17 @@
 ---
 # defaults file for ansible-role-hp-firmware-upgrade
+requirement_pkgs:
+- {name: "{{ ss_utility }}", repo: spp}
+- {name: hp-scripting-tools, repo: stk}
+- {name: pciutils, repo: }
 
-upgrade_ilo_firmware: True
-upgrade_system_rom_firmware: True
-upgrade_disk_controller_firmware: True
-upgrade_disk_drive_firmware: True
-upgrade_disk_backplane_expander: True
-upgrade_power_management_controller_firmware: True
-upgrade_intel_network_adapter_firmware: True
-upgrade_mellanox_network_adapter_firmware: True
-upgrade_qlogic_network_adapter_firmware: True
+install_requirements: False
+upgrade_ilo: False
+upgrade_system_rom: False
+upgrade_disk_controller: False
+upgrade_disk_drive: False
+upgrade_disk_backplane_expander: False
+upgrade_power_management_controller: False
+upgrade_intel_nic: False
+upgrade_mellanox_nic: False
+upgrade_qlogic_nic: False

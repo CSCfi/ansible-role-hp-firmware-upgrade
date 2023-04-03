@@ -16,7 +16,7 @@
   register: fw_rpm
   changed_when: False
   ignore_errors: True
-  check_mode: no
+  check_mode: false
   when: NX2_device.rc == 0
 
 - name: running generic tasks for all firmware things

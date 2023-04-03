@@ -11,7 +11,8 @@
     warn: False
   register: fw_rpm
   changed_when: false
-  ignore_errors: yes
+  ignore_errors: true
+  check_mode: false
 
 - name: running generic tasks for all firmware things
   include_tasks: firmware_installer.yml

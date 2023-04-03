@@ -15,7 +15,7 @@
   register: fw_rpm
   changed_when: False
   ignore_errors: True
-  check_mode: no
+  check_mode: false
 
 - name: running generic tasks for all firmware things
   include_tasks: firmware_installer.yml

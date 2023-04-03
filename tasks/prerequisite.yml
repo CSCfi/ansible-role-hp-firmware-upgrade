@@ -10,7 +10,7 @@
   set_fact:
     ss_utility: "ssacli"
   when:
-    - (hp_gen == "g7") or (hp_gen == "gen8")
+    - (hp_gen == "gen8") or (hp_gen == "gen10")
 
 - name: Set HP storage controller utility hpssacli
   set_fact:
@@ -21,8 +21,10 @@
 - debug:
     msg: "{{ ss_utility }}"
 
-- name: 'Installing required packages like hp-scripting-tools and "{{ ss_utility }}"'
-  package: name={{ item }} state=latest
-  with_items:
-    - hp-scripting-tools
-    - "{{ ss_utility }}"
+- name: Install requirement packages
+  package:
+    name: "{{ item.name }}"
+    enablerepo: "{{ item.repo }}"
+    state: latest
+  loop: "{{ requirement_pkgs }}"  
+  when: install_requirements|bool
