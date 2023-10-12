@@ -1,7 +1,7 @@
 ---
 # defaults file for ansible-role-hp-firmware-upgrade
 requirement_pkgs:
-- {name: "{{ ss_utility }}", repo: spp}
+- {name: ssacli, repo: spp}
 - {name: hp-scripting-tools, repo: stk}
 - {name: pciutils, repo: }
 

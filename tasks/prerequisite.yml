@@ -6,21 +6,6 @@
 - debug:
     msg: "HP model version is: {{ hp_gen }}"
 
-- name: Set HP storage controller utility to ssacli
-  set_fact:
-    ss_utility: "ssacli"
-  when:
-    - (hp_gen == "gen8") or (hp_gen == "gen10")
-
-- name: Set HP storage controller utility hpssacli
-  set_fact:
-    ss_utility: "hpssacli"
-  when:
-    - hp_gen == "gen9"
-
-- debug:
-    msg: "{{ ss_utility }}"
-
 - name: Install requirement packages
   package:
     name: "{{ item.name }}"
