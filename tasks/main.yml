@@ -16,69 +16,78 @@
   tags:
     - ilo
   when: |
-    upgrade_ilo|bool and ((hp_gen == "gen8") or (hp_gen == "gen9"))
+    upgrade_ilo|bool 
+    and not use_modern_installer
 
 - name: Run tasks for system ROM firmware (gen8 and gen9)
   include_tasks: system_rom.yml
   tags:
    - system-rom
   when: |
-    upgrade_system_rom|bool and ((hp_gen == "gen8") or (hp_gen == "gen9"))
+    upgrade_system_rom|bool 
+    and not use_modern_installer
 
 - name: Run tasks for disk controller firmware (gen8 and gen9)
   include_tasks: disk_controller.yml
   tags:
    - disk-controller
   when: |
-    upgrade_disk_controller|bool and ((hp_gen == "gen8") or (hp_gen == "gen9"))
+    upgrade_disk_controller|bool 
+    and not use_modern_installer
 
 - name: Run tasks for disk drive firmware (gen8 and gen9)
   include_tasks: disk_drive.yml
   tags:
    - disk-drive
   when: |
-    upgrade_disk_drive|bool and ((hp_gen == "gen8") or (hp_gen == "gen9"))
+    upgrade_disk_drive|bool 
+    and not use_modern_installer
 
 - name: Run tasks for backplane expander firmware (gen8 and gen9)
   include_tasks: disk_backplane_expander.yml
   tags:
    - disk-backplane-expander
   when: |
-    upgrade_disk_backplane_expander|bool and ((hp_gen == "gen8") or (hp_gen == "gen9"))
+    upgrade_disk_backplane_expander|bool and not use_modern_installer
 
 - name: Run tasks for power management controller firmware (gen8 and gen9)
   include_tasks: power_management_controller.yml
   tags:
    - power-management-controller
   when: |
-    upgrade_power_management_controller|bool and ((hp_gen == "gen8") or (hp_gen == "gen9"))
-
+    upgrade_power_management_controller|bool 
+    and not use_modern_installer
+    
 - name: Run tasks forn Intel NIC firmware (gen8 and gen9)
   include_tasks: intel_network_adapter.yml
   tags:
    - intel-network-adapter
   when: |
-    upgrade_intel_nic|bool and ((hp_gen == "gen8") or (hp_gen == "gen9"))
+    upgrade_intel_nic|bool 
+    and not use_modern_installer
 
 - name: Run tasks for Mellanox NIC firmware (gen8 and gen9)
   include_tasks: mellanox_network_adapter.yml
   tags:
    - mellanox-network-adapter
   when: |
-    upgrade_mellanox_nic|bool and ((hp_gen == "gen8") or (hp_gen == "gen9"))
+    upgrade_mellanox_nic|bool 
+    and not use_modern_installer
 
 - name: Run tasks for qlogic NIC firmware (gen8 and gen9)
   include_tasks: qlogic_network_adapter.yml
   tags:
    - qlogic-network-adapter
   when: |
-    upgrade_qlogic_nic|bool and ((hp_gen == "gen8") or (hp_gen == "gen9"))
+    upgrade_qlogic_nic|bool 
+    and not use_modern_installer
 
-- name: Install gen10 firmwares
-  include_tasks: gen10_firmwares.yml
+- name: Install firmwares from the defined list
+  include_tasks: firmware_list_selector.yml
   with_items: "{{ firmware_list }}"
   when: |
     ansible_system_vendor == 'HPE' and
     ansible_os_family == 'RedHat' and
-    ansible_distribution_major_version == "8" and
-    hp_gen == "gen10" and firmware_list is defined
+    ansible_distribution_major_version >= "8" and
+    firmware_list is defined and 
+    use_modern_installer | bool

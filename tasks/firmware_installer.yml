@@ -7,7 +7,7 @@
 
 - name: Installing firmware "{{ item }}"
   yum: name={{ item | splitext | first }}  state=latest
-  when: hp_gen == "gen8" or hp_gen == "gen9"
+  when: not use_modern_installer
 
 - name: Installing firmware "{{ fw_rpm.stdout }}"
   dnf: 
@@ -15,15 +15,17 @@
     enablerepo: "{{ hp_repository }}"
     update_cache: yes
     state: latest
-  when: hp_gen == "gen10"
+  when: use_modern_installer | bool
+        and ansible_distribution_major_version >= "8"
 
 - name: Define common variable
   set_fact: fw_rpm_name="{{ item }}"
-  when: hp_gen == "gen8" or hp_gen == "gen9"
+  when: not use_modern_installer
 
 - name: Define common variable
   set_fact: fw_rpm_name="{{ fw_rpm.stdout }}"
-  when: hp_gen == "gen10"
+  when: use_modern_installer | bool
+        and ansible_distribution_major_version >= "8"
 
 - name: extract path for hpsetup command
   shell: "rpm -ql {{ fw_rpm_name }}|grep /hpsetup"
@@ -56,10 +58,11 @@
 
 - name: Firmware RPM cleanup {{ item }}
   package: name={{ item | splitext | first }} state=absent
-  when: hp_gen == "gen8" or hp_gen == "gen9"
+  when: not use_modern_installer
 
 - name: Firmware RPM cleanup {{ fw_rpm.stdout }}
   package:
     name: "{{ fw_rpm.stdout }}"
     state: absent
-  when: hp_gen == "gen10"
+  when: use_modern_installer | bool and
+        ansible_distribution_major_version >= "8"

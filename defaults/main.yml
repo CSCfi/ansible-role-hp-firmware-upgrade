@@ -5,6 +5,7 @@ requirement_pkgs:
 - {name: hp-scripting-tools, repo: stk}
 - {name: pciutils, repo: }
 
+use_modern_installer: False
 install_requirements: False
 upgrade_ilo: False
 upgrade_system_rom: False
