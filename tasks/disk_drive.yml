@@ -5,7 +5,7 @@
 #following expects that your system has only same type disks on thats why this incredible stupid hack
 - name: Identifying firmware RPM for disk drives
   shell: >
-    yum search `{{ ss_utility }} ctrl all show config detail
+    yum search `ssacli ctrl all show config detail
     | grep 'Model:' | grep -E '(ATA|HP)'
     | sort -u | awk '{print $NF}'`
     | grep -i firmware-hdd | awk '{print $1}'

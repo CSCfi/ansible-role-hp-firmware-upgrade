@@ -4,7 +4,7 @@
 
 - name: Identifying firmware RPM for Disk backplane expander
   shell: >
-    yum search `{{ ss_utility }} ctrl all show config 
+    yum search `ssacli ctrl all show config 
     | grep Enclosure -m 1| awk '{print $8}'`
     | grep -i `uname -m` | awk '{print $1;exit}'
   args:

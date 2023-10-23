@@ -7,7 +7,7 @@
 
 - name: Identifying firmware RPM for disk controller device
   shell: >
-    yum search `{{ ss_utility }} ctrl all show config
+    yum search `ssacli ctrl all show config
     | grep -i smart -m 1| awk '{print $3}'`
     | grep -i `uname -m` | awk '{print $1;exit}'
   args:
