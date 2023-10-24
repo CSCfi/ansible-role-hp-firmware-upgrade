@@ -10,6 +10,6 @@
   package:
     name: "{{ item.name }}"
     enablerepo: "{{ item.repo }}"
-    state: latest
+    state: present
   loop: "{{ requirement_pkgs }}"  
   when: install_requirements|bool

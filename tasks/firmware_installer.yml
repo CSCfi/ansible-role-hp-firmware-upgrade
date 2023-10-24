@@ -6,7 +6,9 @@
   ignore_errors: true
 
 - name: Installing firmware "{{ item }}"
-  yum: name={{ item | splitext | first }}  state=latest
+  yum: 
+    name: "{{ item | splitext | first }}"
+    state: present
   when: not use_modern_installer
 
 - name: Installing firmware "{{ fw_rpm.stdout }}"
@@ -14,7 +16,7 @@
     name: "{{ fw_rpm.stdout }}"
     enablerepo: "{{ hp_repository }}"
     update_cache: yes
-    state: latest
+    state: present
   when: use_modern_installer | bool
         and ansible_distribution_major_version >= "8"
 
