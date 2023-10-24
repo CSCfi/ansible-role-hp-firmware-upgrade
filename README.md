@@ -20,18 +20,18 @@ Example firmware_list variable for a HPE Apollo 4200 server. It may be advisable
 
 ```
 firmware_list:
-#  - { upgrade_target: 'ILO 5', hp_repository: fwpp, firmware: firmware-ilo5, extra: "", upgrade: false }
-  - { upgrade_target: 'BIOS', hp_repository: fwpp, firmware: firmware-system-u39, extra: "", upgrade: true }
-#  - { upgrade_target: 'HPE Smart Array P816i-a SR Gen10', hp_repository: fwpp, firmware: firmware-smartarray-f7c07bdbbd, extra: "", upgrade: false }
-#  - { upgrade_target: 'HPE 14TB 12G SAS HDD', hp_repository: fwpp, firmware: firmware-hdd-cf0b6cabe1, extra: "", upgrade: false }
-#  - { upgrade_target: 'SSD MR00480GXBGH Drive', hp_repository: fwpp , firmware: firmware-hdd-8f9bf23306, extra: "", upgrade: false }
-#  - { upgrade_target: 'NVMe', hp_repository: fwpp, firmware: 'firmware-hdd-MPK76H5Q', extra: "", upgrade: false }
-#  - { upgrade_target: 'NVMe backplane', hp_repository: spp , firmware: firmware-nvmebackplane-gen10, extra: "", upgrade: false }
-#  - { upgrade_target: 'HPE Ethernet 1Gb 2-port 332i Adapter - NIC', hp_repository: spp, firmware: firmware-nic-broadcom, extra: "", upgrade: false }
-#  - { upgrade_target: 'HPE Eth 10/25Gb 2p 631SFP28 Adapter -NIC', hp_repository: spp, firmware: firmware-nic-bcm-nxe, extra: kmod-bnxt_en, upgrade: false }
-#  - { upgrade_target: 'HPE Innovation Engine', hp_repository: spp, firmware: firmware-iegen10, extra: "", upgrade: false }
-#  - { upgrade_target: 'Power Management Controller', hp_repository: spp, firmware: firmware-powerpic-gen10, extra: "", upgrade: false }
-  - { upgrade_target: 'Server Platform Services (SPS)', hp_repository: fwpp, firmware: firmware-spsgen10, extra: "", upgrade: true }
+#  - { upgrade_target: 'ILO 5', hp_repository: fwpp, firmware: firmware-ilo5, extra: "", upgrade: false, local_installation: false, local_file: "" }
+  - { upgrade_target: 'BIOS', hp_repository: fwpp, firmware: firmware-system-u39, extra: "", upgrade: true, local_installation: false, local_file: "" }
+#  - { upgrade_target: 'HPE Smart Array P816i-a SR Gen10', hp_repository: fwpp, firmware: firmware-smartarray-f7c07bdbbd, extra: "", upgrade: false, local_installation: false, local_file: "" }
+#  - { upgrade_target: 'HPE 14TB 12G SAS HDD', hp_repository: fwpp, firmware: firmware-hdd-cf0b6cabe1, extra: "", upgrade: false, local_installation: false, local_file: "" }
+#  - { upgrade_target: 'SSD MR00480GXBGH Drive', hp_repository: fwpp , firmware: firmware-hdd-8f9bf23306, extra: "", upgrade: false, local_installation: false, local_file: "" }
+#  - { upgrade_target: 'NVMe', hp_repository: fwpp, firmware: 'firmware-hdd-MPK76H5Q', extra: "", upgrade: false, local_installation: false, local_file: "" }
+#  - { upgrade_target: 'NVMe backplane', hp_repository: spp , firmware: firmware-nvmebackplane-gen10, extra: "", upgrade: false, local_installation: false, local_file: "" }
+#  - { upgrade_target: 'HPE Ethernet 1Gb 2-port 332i Adapter - NIC', hp_repository: spp, firmware: firmware-nic-broadcom, extra: "", upgrade: false, local_installation: false, local_file: "" }
+#  - { upgrade_target: 'HPE Eth 10/25Gb 2p 631SFP28 Adapter -NIC', hp_repository: spp, firmware: firmware-nic-bcm-nxe, extra: kmod-bnxt_en, upgrade: false, local_installation: false, local_file: "" }
+#  - { upgrade_target: 'HPE Innovation Engine', hp_repository: spp, firmware: firmware-iegen10, extra: "", upgrade: false, local_installation: false, local_file: "" }
+#  - { upgrade_target: 'Power Management Controller', hp_repository: spp, firmware: firmware-powerpic-gen10, extra: "", upgrade: false, local_installation: false, local_file: "" }
+  - { upgrade_target: 'Server Platform Services (SPS)', hp_repository: fwpp, firmware: firmware-spsgen10, extra: "", upgrade: true, local_installation: false, local_file: "" }
 ```
 
 For Gen8 and Gen9 HP Servers, list of components upgraded by this role are

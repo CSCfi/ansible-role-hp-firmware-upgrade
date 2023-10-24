@@ -11,21 +11,33 @@
     state: present
   when: not use_modern_installer
 
-- name: Installing firmware "{{ fw_rpm.stdout }}"
-  dnf: 
-    name: "{{ fw_rpm.stdout }}"
-    enablerepo: "{{ hp_repository }}"
-    update_cache: yes
-    state: present
-  when: use_modern_installer | bool
-        and ansible_distribution_major_version >= "8"
+- name: Installing firmware "{{ item.firmware }}"
+  block:
+    - name: Install firmware "{{ item.firmware }}" from a repository
+      dnf:
+        name: "{{ item.firmware }}"
+        enablerepo: "{{ item.hp_repository }}"
+        update_cache: yes
+        state: present
+      when: use_modern_installer | bool
+            and ansible_distribution_major_version >= "8"
+            and not local_installation
+
+    - name: Install firmware from local rpm file
+      ansible.builtin.yum:
+        name: "/tmp/{{ item.local_file }}"
+        state: present
+        disable_gpg_check: true
+      when: use_modern_installer | bool
+            and ansible_distribution_major_version >= "8"
+            and local_installation | bool
 
 - name: Define common variable
   set_fact: fw_rpm_name="{{ item }}"
   when: not use_modern_installer
 
 - name: Define common variable
-  set_fact: fw_rpm_name="{{ fw_rpm.stdout }}"
+  set_fact: fw_rpm_name="{{ item.firmware }}"
   when: use_modern_installer | bool
         and ansible_distribution_major_version >= "8"
 
@@ -62,9 +74,9 @@
   package: name={{ item | splitext | first }} state=absent
   when: not use_modern_installer
 
-- name: Firmware RPM cleanup {{ fw_rpm.stdout }}
+- name: Firmware RPM cleanup {{ item.firmware }}
   package:
-    name: "{{ fw_rpm.stdout }}"
+    name: "{{ item.firmware }}"
     state: absent
   when: use_modern_installer | bool and
         ansible_distribution_major_version >= "8"

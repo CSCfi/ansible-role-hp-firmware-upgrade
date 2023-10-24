@@ -86,7 +86,7 @@
   include_tasks: firmware_list_selector.yml
   with_items: "{{ firmware_list }}"
   when: |
-    ansible_system_vendor == 'HPE' and
+    ansible_system_vendor == 'HP' or 'HPE' and
     ansible_os_family == 'RedHat' and
     ansible_distribution_major_version >= "8" and
     firmware_list is defined and 

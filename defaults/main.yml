@@ -1,5 +1,7 @@
 ---
 # defaults file for ansible-role-hp-firmware-upgrade
+local_firmware_location: files/rpms/
+
 requirement_pkgs:
 - {name: ssacli, repo: spp}
 - {name: hp-scripting-tools, repo: stk}

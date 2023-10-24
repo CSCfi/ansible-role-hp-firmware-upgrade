@@ -1,21 +1,38 @@
 ---
-- name: Choose repository for the firmware
-  set_fact: hp_repository={{ item.hp_repository }}
-  
-- name: Identifying firmware for {{ item.upgrade_target }}
-  shell: "dnf list --enablerepo={{ item.hp_repository }} {{ item.firmware }} | tail -1 | awk '{print $NR}'"
-  args:
-    warn: False
-  register: fw_rpm
-  changed_when: False
-  ignore_errors: True
-  check_mode: False
+- name: Check if the installation uses local installation or repository
+  set_fact: local_installation={{ item.local_installation }}
 
 - name: Check the permission to upgrade
   set_fact: upgrade={{ item.upgrade }}
- 
-- name: Starting firmware installer for items in "{{ fw_rpm.stdout_lines }}"
+
+- name: Copy local firmware rpms 
+  copy: 
+    dest: /tmp/{{ item.local_file }}
+    src:  "{{ local_firmware_location }}/{{ item.local_file }}"
+    owner: root 
+    group: root 
+    mode: '0440'
+  when: local_installation | bool
+
+- name: Choose repository for the firmware
+  set_fact: hp_repository={{ item.hp_repository }}
+  when: not local_installation
+
+#Test if the remote installation works without this!
+#- name: Identifying firmware for {{ item.upgrade_target }}
+#  block:
+#  - name: Identify firmware when using remote repository
+#    dnf:
+#      name: "{{ item.firmware }}"
+#      enablerepo: "{{ item.hp_repository }}"
+#    register: fw_rpm
+#    changed_when: False
+#    ignore_errors: True
+#    check_mode: False
+#    when: not local_installation
+
+- name: Starting firmware installer for items in "{{ item.firmware }}"
   include_tasks: firmware_installer.yml
   when: |
-    fw_rpm.rc == 0 and
-    upgrade
+    upgrade | bool and
+    local_installation is defined
