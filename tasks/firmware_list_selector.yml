@@ -12,7 +12,9 @@
     owner: root 
     group: root 
     mode: '0440'
-  when: local_installation | bool
+  when: |
+    upgrade | bool and
+    local_installation | bool
 
 - name: Choose repository for the firmware
   set_fact: hp_repository={{ item.hp_repository }}
