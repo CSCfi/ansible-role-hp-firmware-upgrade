@@ -47,10 +47,10 @@
     warn: False
   register: FirmwarePackage
   changed_when: False
-  check_mode: false
 
 - name:  set_fact for firmware_installer path from "{{ fw_rpm_name }}" RPM
   set_fact: firmware_installer="{{ FirmwarePackage.stdout | splitext | first }}"
+  when: FirmwarePackage | bool
 
 - name: Installing firmware from "{{ fw_rpm_name }}"  in silent mode
   command: "{{ firmware_installer }}  -s "
@@ -68,7 +68,9 @@
 - name: Print optional installer log for "{{ fw_rpm_name }}"
   debug:
     msg: "{{ details.stdout_lines }}"
-  when: details.rc == 0
+  when: |
+    details | bool and
+    details.rc == 0
 
 - name: Firmware RPM cleanup {{ item }}
   package: name={{ item | splitext | first }} state=absent
