@@ -5,6 +5,9 @@
 - name: Check the permission to upgrade
   set_fact: upgrade={{ item.upgrade }}
 
+- name: Check the permission to reboot
+  set_fact: reboot={{ item.reboot }}
+
 - name: Copy local firmware rpms 
   copy: 
     dest: /tmp/{{ item.local_file }}
@@ -38,3 +41,11 @@
   when: |
     upgrade | bool and
     local_installation is defined
+
+- name: Reboot the host after applying firmware
+  ansible.builtin.reboot:
+    msg: "Rebooted by ansible after firmware update"
+    reboot_timeout: 3600
+  when: | 
+    reboot | bool and
+    upgrade | bool

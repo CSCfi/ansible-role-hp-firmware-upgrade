@@ -18,3 +18,5 @@ upgrade_power_management_controller: False
 upgrade_intel_nic: False
 upgrade_mellanox_nic: False
 upgrade_qlogic_nic: False
+
+reboot_host: false
