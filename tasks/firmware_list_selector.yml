@@ -1,13 +1,4 @@
 ---
-- name: Check if the installation uses local installation or repository
-  set_fact: local_installation={{ item.local_installation }}
-
-- name: Check the permission to upgrade
-  set_fact: upgrade={{ item.upgrade }}
-
-- name: Check the permission to reboot
-  set_fact: reboot={{ item.reboot }}
-
 - name: Copy local firmware rpms 
   copy: 
     dest: /tmp/{{ item.local_file }}
@@ -16,12 +7,12 @@
     group: root 
     mode: '0440'
   when: |
-    upgrade | bool and
-    local_installation | bool
+    item.upgrade | bool and
+    item.local_installation | bool
 
 - name: Choose repository for the firmware
   set_fact: hp_repository={{ item.hp_repository }}
-  when: not local_installation
+  when: not item.local_installation
 
 #Test if the remote installation works without this!
 #- name: Identifying firmware for {{ item.upgrade_target }}
@@ -39,13 +30,14 @@
 - name: Starting firmware installer for items in "{{ item.firmware }}"
   include_tasks: firmware_installer.yml
   when: |
-    upgrade | bool and
-    local_installation is defined
+    item.upgrade | bool and
+    item.local_installation is defined
+
 
 - name: Reboot the host after applying firmware
   ansible.builtin.reboot:
     msg: "Rebooted by ansible after firmware update"
-    reboot_timeout: 3600
+    reboot_timeout: 900 #Time out after 15 minutes
   when: | 
-    reboot | bool and
-    upgrade | bool
+    item.reboot | bool and
+    item.upgrade | bool
