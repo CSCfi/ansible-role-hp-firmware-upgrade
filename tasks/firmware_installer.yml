@@ -21,7 +21,7 @@
         state: present
       when: use_modern_installer | bool
             and ansible_distribution_major_version >= "8"
-            and not local_installation
+            and not item.local_installation
 
     - name: Install firmware from local rpm file
       ansible.builtin.yum:
@@ -30,7 +30,7 @@
         disable_gpg_check: true
       when: use_modern_installer | bool
             and ansible_distribution_major_version >= "8"
-            and local_installation | bool
+            and item.local_installation | bool
 
 - name: Define common variable
   set_fact: fw_rpm_name="{{ item }}"
