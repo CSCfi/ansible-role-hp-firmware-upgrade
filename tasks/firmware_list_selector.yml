@@ -40,4 +40,5 @@
     reboot_timeout: 900 #Time out after 15 minutes
   when: | 
     item.reboot | bool and
-    item.upgrade | bool
+    item.upgrade | bool and
+    hp_firmware_allow_reboots | bool
