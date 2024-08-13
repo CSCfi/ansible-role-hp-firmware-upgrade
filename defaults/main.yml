@@ -1,6 +1,7 @@
 ---
 # defaults file for ansible-role-hp-firmware-upgrade
 local_firmware_location: files/rpms/
+hp_firmware_allow_reboots: false
 
 requirement_pkgs:
 - {name: ssacli, repo: spp}
