@@ -1,10 +1,10 @@
 language: python
 
 sudo: required
-dist: focal
-group: edge
-python:
+dist: jammy
+python: 
   - "3.8"
+group: edge
 
 services:
   - docker
@@ -13,12 +13,27 @@ matrix:
   fast_finish: true
 
 env:
-  - IMAGE_BUILD_PLATFORM=devel-centos7
-  - IMAGE_BUILD_PLATFORM=epel-centos7
+#  - IMAGE_BUILD_PLATFORM=devel-centos7 #disabled for faster debugging of alma9 dockerfile
+#  - IMAGE_BUILD_PLATFORM=epel-centos7 #disable due to no differences to devel-centos7 dockerfile
   - IMAGE_BUILD_PLATFORM=stable-centos8
+  - IMAGE_BUILD_PLATFORM=devel-alma9
+  - IMAGE_BUILD_PLATFORM=stable-alma9
+
+# Enable cgroups v2 for Docker
+before_install:
+  - sudo mkdir -p /etc/docker
+  - |
+    sudo tee /etc/docker/daemon.json <<EOF
+    {
+      "exec-opts": ["native.cgroupdriver=systemd"],
+      "features": { "cgroup2": true }
+    }
+    EOF
+  - sudo systemctl restart docker
 
 install:
-  - npm install --location=global validate-dockerfile
+  - npm install validate-dockerfile
+#  - npm list validate-dockerfile
 
 before_script:
   # TESTDIR = Where the stable-centos/Dockerfile is located
@@ -30,15 +45,17 @@ before_script:
   - export REPO=csc/ansible
   # Validate the Dockerfile
   - npx docklint ${TESTDIR}/${IMAGE_BUILD_PLATFORM}/Dockerfile
-  # Build the image
+  # Build the image with cgroups v2 support
   - docker build -t ${REPO}:${IMAGE_BUILD_PLATFORM} ${TESTDIR}/${IMAGE_BUILD_PLATFORM}/
-  # Launch the container
-  - docker run --privileged -d -ti -e "container=docker"  -v `pwd`:/$ROLETOTEST -v /sys/fs/cgroup:/sys/fs/cgroup  ${REPO}:${IMAGE_BUILD_PLATFORM}  /usr/sbin/init
+  # Launch the container with systemd and cgroups v2 enabled
+  - docker run --privileged --cgroupns=host -d -ti -e "container=docker" -v `pwd`:/$ROLETOTEST -v /sys/fs/cgroup:/sys/fs/cgroup:rw ${REPO}:${IMAGE_BUILD_PLATFORM} /usr/sbin/init
+
   - DOCKER_CONTAINER_ID=$(docker ps | grep ${IMAGE_BUILD_PLATFORM} | awk '{print $1}')
   - docker logs $DOCKER_CONTAINER_ID
   # Testing of this ansible-role:
 script:
   - docker exec -ti $DOCKER_CONTAINER_ID /bin/sh -c "/$ROLETOTEST/tests/test-in-docker-image.sh"
+
 after_script:
   # Print some logs and other useful information for debugging travis:
   - >
@@ -50,8 +67,6 @@ after_script:
   - docker ps -a
   - docker stop $DOCKER_CONTAINER_ID
   - docker rm -v $DOCKER_CONTAINER_ID
-#after_success:
-#  - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
 
 notifications:
   email: false
