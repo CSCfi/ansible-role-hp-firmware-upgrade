@@ -3,6 +3,8 @@ language: python
 sudo: required
 dist: bionic
 group: edge
+python:
+  - "3.8"
 
 services:
   - docker
