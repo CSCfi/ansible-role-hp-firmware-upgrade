@@ -18,7 +18,7 @@ env:
   - IMAGE_BUILD_PLATFORM=stable-centos8
 
 install:
-  - npm install -g validate-dockerfile
+  - npm install --location=global validate-dockerfile
 
 before_script:
   # TESTDIR = Where the stable-centos/Dockerfile is located
