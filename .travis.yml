@@ -28,8 +28,8 @@ before_script:
   - export COMMIT=${TRAVIS_COMMIT::8}
   # The tag we assign the docker image we build with the Dockerfile
   - export REPO=csc/ansible
-  # https://www.npmjs.com/package/validate-dockerfile - validate the Dockerfile
-  - docklint ${TESTDIR}/${IMAGE_BUILD_PLATFORM}/Dockerfile
+  # Validate the Dockerfile
+  - npx docklint ${TESTDIR}/${IMAGE_BUILD_PLATFORM}/Dockerfile
   # Build the image
   - docker build -t ${REPO}:${IMAGE_BUILD_PLATFORM} ${TESTDIR}/${IMAGE_BUILD_PLATFORM}/
   # Launch the container
