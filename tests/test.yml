@@ -1,21 +1,13 @@
 ---
 
- - hosts: localhost
+ - hosts: testservers
    remote_user: root
 
    pre_tasks:
-       - name: Install HPE SPP repo
-         yum_repository:
-           name: "hpspp"
-           description: "hpespp"
-           baseurl: "http://downloads.linux.hpe.com/repo/spp/rhel/7/x86_64/current/"
-           gpgcheck: "no"
-       - name: Install HPE STK repo
-         yum_repository:
-           name: "hpstk"
-           description: "hpestk"
-           baseurl: "http://downloads.linux.hpe.com/SDR/repo/stk/rhel/7/x86_64/current/"
-           gpgcheck: "no"
+    - name: Set some facts needed for testing
+      ansible.builtin.set_fact:
+        ansible_system_vendor: "{{ system_vendor }}"
+        ansible_product_name: "HPSERVER GEN {{ gen }}"
 
    roles:
      - ansible-role-hp-firmware-upgrade

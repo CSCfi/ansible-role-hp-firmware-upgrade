@@ -82,12 +82,20 @@
     upgrade_qlogic_nic|bool 
     and not use_modern_installer
 
+- ansible.builtin.debug:
+    var: '{{ item }}'
+  with_items:
+    - ansible_system_vendor
+    - ansible_os_family
+    - ansible_distribution_major_version
+    - firmware_list
+    - use_modern_installer 
+
 - name: Install firmwares from the defined list
   include_tasks: firmware_list_selector.yml
-  with_items: "{{ firmware_list }}"
-  when: |
-    ansible_system_vendor == 'HP' or 'HPE' and
+  with_items: "{{ firmware_list | default([]) }}" #with_items: "{{ firmware_list | default([]) }}"  ensures that if firmware_list is undefined, it defaults to an empty list. This avoids the failure by providing a default value.
+  when: | # This checks if ansible_system_vendor is either 'HP' or 'HPE', making the check more concise.
     ansible_os_family == 'RedHat' and
-    ansible_distribution_major_version >= "8" and
+    ansible_distribution_major_version | int >= 8 and
     firmware_list is defined and 
     use_modern_installer | bool

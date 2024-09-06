@@ -1,0 +1,27 @@
+[hpsum]
+name=HP Smart Update Manager
+baseurl=https://downloads.linux.hpe.com/repo/hpsum/rhel/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/current/
+enabled=1
+gpgcheck=0
+gpgkey=file:///etc/pki/rpm-gpg/GPG-KEY-hpsum
+
+[ilorest]
+name=RESTful Interface tool
+baseurl=https://downloads.linux.hpe.com/SDR/repo/ilorest/rhel/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/current/
+enabled=1
+gpgcheck=0
+gpgkey=file:///etc/pki/rpm-gpg/GPG-KEY-hprest
+
+[stk]
+name=HP scripting tools
+baseurl=https://downloads.linux.hpe.com/repo/stk/rhel/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/current/
+enabled=1
+gpgcheck=0
+gpgkey=file:///etc/pki/rpm-gpg/GPG-KEY-stk
+
+[spp]
+name=Service Pack for ProLiant
+baseurl=https://downloads.linux.hpe.com/SDR/repo/spp-gen9/RHEL/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/current/
+enabled=1
+gpgcheck=0
+gpgkey=file:///etc/pki/rpm-gpg/GPG-KEY-ServicePackforProLiant
