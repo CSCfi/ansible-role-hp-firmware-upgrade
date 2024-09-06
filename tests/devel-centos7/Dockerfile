@@ -1,7 +1,9 @@
 # Latest version of centos
 FROM centos:centos7
 MAINTAINER James Cuzella <james.cuzella@lyraphase.com>
-RUN yum clean all && \
+RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* && \
+    sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-* && \
+    yum clean all && \
     yum -y install epel-release && \
     yum makecache all && \
     yum -y groups mark convert && \
