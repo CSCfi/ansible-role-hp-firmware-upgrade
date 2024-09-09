@@ -2,9 +2,9 @@ language: python
 
 sudo: required
 dist: jammy
+group: edge
 python: 
   - "3.8"
-group: edge
 
 services:
   - docker
@@ -13,8 +13,6 @@ matrix:
   fast_finish: true
 
 env:
-#  - IMAGE_BUILD_PLATFORM=devel-centos7 #disabled for faster debugging of alma9 dockerfile
-#  - IMAGE_BUILD_PLATFORM=epel-centos7 #disable due to no differences to devel-centos7 dockerfile
   - IMAGE_BUILD_PLATFORM=stable-centos8
   - IMAGE_BUILD_PLATFORM=devel-alma9
   - IMAGE_BUILD_PLATFORM=stable-alma9
