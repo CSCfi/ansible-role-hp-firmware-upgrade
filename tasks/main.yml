@@ -10,6 +10,8 @@
     - power-management-controller
     - intel-network-adapter
     - mellanox-network-adapter
+    - firmware
+    - repositories
 
 - name: Run tasks for ILO4 firmware (gen8 and gen9)
   include_tasks: ilo.yml
@@ -82,12 +84,21 @@
     upgrade_qlogic_nic|bool 
     and not use_modern_installer
 
+- ansible.builtin.debug:
+    var: '{{ item }}'
+  with_items:
+    - ansible_system_vendor
+    - ansible_os_family
+    - ansible_distribution_major_version
+    - firmware_list
+    - use_modern_installer 
+
 - name: Install firmwares from the defined list
   include_tasks: firmware_list_selector.yml
-  with_items: "{{ firmware_list }}"
-  when: |
-    ansible_system_vendor == 'HP' or 'HPE' and
+  tags: firmware
+  with_items: "{{ firmware_list | default([]) }}" #if firmware_list is undefined, it defaults to an empty list.
+  when: | 
     ansible_os_family == 'RedHat' and
-    ansible_distribution_major_version >= "8" and
+    ansible_distribution_major_version | int >= 8 and
     firmware_list is defined and 
     use_modern_installer | bool

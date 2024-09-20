@@ -3,13 +3,50 @@
   set_fact:
     hp_gen: "{{ ansible_product_name.split(' ')[2] | lower }}"
 
-- debug:
-    msg: "HP model version is: {{ hp_gen }}"
+- name: Copy HP repository GPG keys
+  copy:
+    src: files/gpg-keys/GPG-KEY-{{ item }}.j2
+    dest: /etc/pki/rpm-gpg/GPG-KEY-{{ item }}
+    owner: root
+    group: root
+    mode: '0644'
+  loop:
+    - fwpp
+    - hprest
+    - hpsum
+    - ServicePackforProLiant
+    - stk
+
+- name: Template HP YUM repository file
+  template: 
+    src: templates/HP.repo.j2 
+    dest: /etc/yum.repos.d/HP.repo 
+    owner: root 
+    group: root 
+    mode: '0644'
+
+- name: Template HP YUM fwpp gen9 repository file
+  template: 
+    src: HPgen9fwpp.repo.j2 
+    dest: /etc/yum.repos.d/HPgen9fwpp.repo 
+    owner: root 
+    group: root 
+    mode: '0644'
+  when: hp_gen == "9" and vault_hp_firmware_repository_access is defined
+
+- name: Template HP YUM fwpp gen10 repository file
+  template: 
+    src: HPgen10+fwpp.repo.j2 
+    dest: /etc/yum.repos.d/HPgen10+fwpp.repo 
+    owner: root 
+    group: root 
+    mode: '0644'
+  when: hp_gen == "10"
 
 - name: Install requirement packages
   package:
     name: "{{ item.name }}"
     enablerepo: "{{ item.repo }}"
     state: present
-  loop: "{{ requirement_pkgs }}"  
+  with_items: "{{ requirement_pkgs }}"  
   when: install_requirements|bool

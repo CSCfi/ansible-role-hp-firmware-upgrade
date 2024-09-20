@@ -1,32 +1,39 @@
-# https://github.com/CSC-IT-Center-for-Science/fgci-ansible/blob/master/examples/hosts-example
-localhost
+testservers:
+    children:
+        hp_gen9:
+        hpe_gen10:
 
-[login]
-localhost
+hp_gen9:
+    hosts:
+        server1:
+    vars:
+        gen: 9
+        system_vendor: "HP"
+        install_requirements: False
+        use_modern_installer: False
 
-[admin]
-localhost
-
-[grid]
-localhost
-
-[install]
-localhost
-
-[compute]
-localhost ip_address=10.1.100.1 mac_address=00:11:22:33:44:55 pxe=yes
-
-[pxe_bootable_nodes:children]
-compute
-
-[production:children]
-install
-admin
-#login
-grid
-
-[slurm_service:children]
-install
-
-[slurm_compute:children]
-compute
+hpe_gen10:
+    hosts:
+        server2:
+    vars:
+        gen: 10
+        use_modern_installer: False
+        system_vendor: "HPE"
+        install_requirements: False
+        firmware_list:
+            - upgrade_target: 'ILO 5'
+              hp_repository: fwpp
+              firmware: firmware-ilo5
+              extra: ""
+              upgrade: false
+              local_installation: false
+              local_file: ""
+              reboot: false
+            - upgrade_target: 'BIOS'
+              hp_repository: fwpp
+              firmware: firmware-system-u39
+              extra: ""
+              upgrade: true
+              local_installation: false
+              local_file: ""
+              reboot: true
