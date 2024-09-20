@@ -96,8 +96,8 @@
 - name: Install firmwares from the defined list
   include_tasks: firmware_list_selector.yml
   tags: firmware
-  with_items: "{{ firmware_list | default([]) }}" #with_items: "{{ firmware_list | default([]) }}"  ensures that if firmware_list is undefined, it defaults to an empty list. This avoids the failure by providing a default value.
-  when: | # This checks if ansible_system_vendor is either 'HP' or 'HPE', making the check more concise.
+  with_items: "{{ firmware_list | default([]) }}" #if firmware_list is undefined, it defaults to an empty list.
+  when: | 
     ansible_os_family == 'RedHat' and
     ansible_distribution_major_version | int >= 8 and
     firmware_list is defined and 
