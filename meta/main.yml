@@ -4,14 +4,13 @@ galaxy_info:
   description: This role automates HP firmware upgradation process using ansible
   company: CSC - IT Center for Science Ltd.
   license: MIT
-  min_ansible_version: 2.0
+  min_ansible_version: "2.9.27"
   platforms:
   - name: EL
     versions:
   #  - all
-  #  - 5
-    - 6
-    - 7
+    - "8"
+    - "9"
   galaxy_tags:
   - system
   - firmware
