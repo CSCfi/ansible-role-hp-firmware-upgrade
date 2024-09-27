@@ -21,7 +21,7 @@ gpgkey=file:///etc/pki/rpm-gpg/GPG-KEY-stk
 
 [spp]
 name=Service Pack for ProLiant
-baseurl=https://downloads.linux.hpe.com/SDR/repo/spp-gen9/RHEL/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/current/
+baseurl=https://downloads.linux.hpe.com/SDR/repo/spp-{{ hp_gen }}/redhat/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/current/
 enabled=1
 gpgcheck=0
 gpgkey=file:///etc/pki/rpm-gpg/GPG-KEY-ServicePackforProLiant

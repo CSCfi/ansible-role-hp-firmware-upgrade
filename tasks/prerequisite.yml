@@ -32,7 +32,7 @@
     owner: root 
     group: root 
     mode: '0644'
-  when: hp_gen == "9" and vault_hp_firmware_repository_access is defined
+  when: hp_gen == "gen9" and vault_hp_firmware_repository_access is defined
 
 - name: Template HP YUM fwpp gen10 repository file
   template: 
@@ -41,7 +41,7 @@
     owner: root 
     group: root 
     mode: '0644'
-  when: hp_gen == "10"
+  when: hp_gen == "gen10"
 
 - name: Install requirement packages
   package:
