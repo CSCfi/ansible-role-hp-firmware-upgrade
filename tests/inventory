@@ -20,6 +20,7 @@ hpe_gen10:
         use_modern_installer: False
         system_vendor: "HPE"
         install_requirements: False
+        upgrade_mellanox_100g: true
         firmware_list:
             - upgrade_target: 'ILO 5'
               hp_repository: fwpp
