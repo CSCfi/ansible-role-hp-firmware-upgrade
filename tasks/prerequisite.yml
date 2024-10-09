@@ -50,3 +50,9 @@
     state: present
   with_items: "{{ requirement_pkgs }}"  
   when: install_requirements|bool
+
+#- name: Create the default firmware directory if it doesn't exist
+#  ansible.builtin.file:
+#    path: files/rpms
+#    state: directory
+#    recurse: yes

@@ -5,5 +5,5 @@
 - name: Download the Mellanox firmware from HPE server
   ansible.builtin.get_url:
     url: https://downloads.hpe.com/pub/softlib2/software1/pubsw-linux/p243462544/v254128/fw-ConnectX5-rel-16_35_4030-MCX515A-CCA_HPE_Ax-UEFI-14.29.15-FlexBoot-3.6.902.tar.gz
-    dest: "{{ local_firmware_location }}"
+    dest: /tmp/fw-ConnectX5-rel-16_35_4030-MCX515A-CCA_HPE_Ax-UEFI-14.29.15-FlexBoot-3.6.902.tar.gz
     checksum: sha256:a7b79502f00b0ecb62a66b712776dfb50cf6f41160d86c2b6cff5cbf321e6dca
