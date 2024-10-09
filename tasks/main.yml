@@ -84,6 +84,14 @@
     upgrade_qlogic_nic|bool 
     and not use_modern_installer
 
+- name: Run tasks for Mellanox NIC firmware (gen10)
+  ansible.builtin.include_tasks: mellanox_100gb.yml
+  tags:
+    - mellanox_100gb
+  when: | 
+    upgrade_mellanox_100g|bool
+    and not use_modern_installer
+
 - ansible.builtin.debug:
     var: '{{ item }}'
   with_items:
