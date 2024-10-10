@@ -15,3 +15,10 @@
   ansible.builtin.rpm_key:
     state: present
     key: https://downloads.linux.hpe.com/SDR/hpePublicKey2048_key1.pub
+
+- name: Verify the firmware signature
+  ansible.builtin.command: gpg --verify "{{ item.file }}" 
+  loop:
+    - { file: /tmp/fw-ConnectX5-rel-16_35_4030-MCX515A-CCA_HPE_Ax-UEFI-14.29.15-FlexBoot-3.6.902.tar.gz }
+    - { file: /tmp/fw-ConnectX5-rel-16_35_4030-MCX515A-CCA_HPE_Ax-UEFI-14.29.15-FlexBoot-3.6.902.tar.gz.sig }
+
