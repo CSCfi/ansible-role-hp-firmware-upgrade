@@ -1,2 +1,4 @@
 ---
 # handlers file for ansible-role-hp-firmware-upgrade
+- name: Verify firmware signature
+  ansible.builtin.command: gpg --verify "{{ local_firmware_location }}/fw-ConnectX5-rel-16_35_4030-MCX515A-CCA_HPE_Ax-UEFI-14.29.15-FlexBoot-3.6.902.tar.gz.sig" "{{ local_firmware_location }}/fw-ConnectX5-rel-16_35_4030-MCX515A-CCA_HPE_Ax-UEFI-14.29.15-FlexBoot-3.6.902.tar.gz"
