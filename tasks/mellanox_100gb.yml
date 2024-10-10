@@ -2,6 +2,12 @@
 - name: assert that we only run on HPE
   assert: { that: "ansible_system_vendor == 'HPE'" }
 
+- name: Ensure the local firmware directory exists
+  ansible.builtin.file:
+    path: "{{ local_firmware_location }}"
+    state: directory
+    mode: '0755'
+
 - name: Download the Mellanox firmware from HPE server
   ansible.builtin.get_url:
     url: "{{ item.url }}{{item.file}}"
