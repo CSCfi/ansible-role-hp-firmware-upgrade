@@ -8,16 +8,19 @@
     state: directory
     mode: '0755'
 
+- name: Import the HPE GPG 2028-bit Public key from the repository
+  ansible.builtin.command: rpm --import https://downloads.linux.hpe.com/SDR/hpePublicKey2048_key1.pub
+
 - name: Import the HPE GPG 2028-bit Public key
   ansible.builtin.rpm_key:
     state: present
     key: "{{ item.key }}"
   loop:
-    - { key: https://downloads.linux.hpe.com/SDR/hpePublicKey2048_key1.pub }
+    - { key: hpePublicKey2048_key1.pub }
 #    - { key: https://downloads.linux.hpe.com/SDR/hpePublicKey2048_key2.pub }
 
-- name: Import the HPE GPG 2028-bit Public key
-  ansible.builtin.command: gpg --import hpePublicKey2048_key1.pub
+#- name: Import the HPE GPG 2028-bit Public key
+#  ansible.builtin.command: gpg --import hpePublicKey2048_key1.pub
 
 - name: Download the Mellanox firmware from HPE server
   ansible.builtin.get_url:
