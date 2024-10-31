@@ -16,8 +16,8 @@
     state: present
     key: "{{ item.key }}"
   loop:
-    - { key: hpePublicKey2048_key1.pub }
-#    - { key: https://downloads.linux.hpe.com/SDR/hpePublicKey2048_key2.pub }
+#    - { key: hpePublicKey2048_key1.pub }
+    - { key: https://downloads.linux.hpe.com/SDR/hpePublicKey2048_key2.pub }
 
 #- name: Import the HPE GPG 2028-bit Public key
 #  ansible.builtin.command: gpg --import hpePublicKey2048_key1.pub
