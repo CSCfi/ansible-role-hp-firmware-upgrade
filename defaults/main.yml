@@ -5,7 +5,6 @@ hp_firmware_allow_reboots: false
 
 requirement_pkgs:
 - {name: ssacli, repo: spp}
-- {name: hp-scripting-tools, repo: stk}
 - {name: pciutils, repo: }
 
 use_modern_installer: False
