@@ -4,8 +4,9 @@ local_firmware_location: files/rpms/
 hp_firmware_allow_reboots: false
 
 requirement_pkgs:
-- {name: ssacli, repo: spp}
-- {name: pciutils, repo: }
+- { name: ssacli, repo: spp }
+- { name: pciutils, repo: }
+- { name: ilorest, repo: ilorest }
 
 use_modern_installer: False
 install_requirements: False
