@@ -15,7 +15,6 @@
     - hprest
     - hpsum
     - ServicePackforProLiant
-    - stk
 
 - name: Template HP YUM repository file
   template: 
