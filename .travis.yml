@@ -1,10 +1,7 @@
-language: python
+language: generic
 
-sudo: required
+os: linux
 dist: jammy
-group: edge
-python: 
-  - "3.8"
 
 services:
   - docker
@@ -17,21 +14,8 @@ env:
   - IMAGE_BUILD_PLATFORM=devel-alma9
   - IMAGE_BUILD_PLATFORM=stable-alma9
 
-# Enable cgroups v2 for Docker
-before_install:
-  - sudo mkdir -p /etc/docker
-  - |
-    sudo tee /etc/docker/daemon.json <<EOF
-    {
-      "exec-opts": ["native.cgroupdriver=systemd"],
-      "features": { "cgroup2": true }
-    }
-    EOF
-  - sudo systemctl restart docker
-
 install:
   - npm install validate-dockerfile
-#  - npm list validate-dockerfile
 
 before_script:
   # TESTDIR = Where the stable-centos/Dockerfile is located
