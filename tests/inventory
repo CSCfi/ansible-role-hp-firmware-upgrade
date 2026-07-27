@@ -17,7 +17,7 @@ hpe_gen10:
         server2:
     vars:
         gen: 10
-        use_modern_installer: False
+        use_modern_installer: True
         system_vendor: "HPE"
         install_requirements: False
         firmware_list:
