@@ -13,7 +13,7 @@ ANSIBLE_VAR=""
 ANSIBLE_INVENTORY="tests/inventory"
 ANSIBLE_PLAYBOOk="tests/test.yml"
 #ANSIBLE_LOG_LEVEL=""
-ANSIBLE_LOG_LEVEL="-v"
+ANSIBLE_LOG_LEVEL="-vvv"
 APACHE_CTL="apache2ctl"
 
 # if there wasn't sudo then ansible couldn't use it
@@ -134,7 +134,7 @@ function main(){
     test_ansible_setup
     test_playbook_syntax
     test_playbook
-#    test_playbook_check
+    test_playbook_check
 #    extra_tests
 
 }
