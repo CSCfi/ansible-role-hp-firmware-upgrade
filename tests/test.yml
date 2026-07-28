@@ -9,5 +9,12 @@
         ansible_system_vendor: "{{ system_vendor }}"
         ansible_product_name: "HPSERVER GEN {{ gen }}"
 
+    - name: Clean and rebuild cache
+      command: "{{ item }}"
+      loop:
+      - dnf clean all
+      - dnf makecache
+      changed_when: false
+
    roles:
      - ansible-role-hp-firmware-upgrade
