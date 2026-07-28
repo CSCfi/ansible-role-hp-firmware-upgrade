@@ -1,6 +1,6 @@
 testservers:
     children:
-        hp_gen9:
+#        hp_gen9:
         hpe_gen10:
 
 hp_gen9:
