@@ -7,7 +7,7 @@ hp_gen9:
     hosts:
         server1:
     vars:
-        gen: 9
+        gen: "gen9"
         system_vendor: "HP"
         install_requirements: False
         use_modern_installer: False
@@ -16,7 +16,7 @@ hpe_gen10:
     hosts:
         server2:
     vars:
-        gen: 10
+        gen: "gen10"
         use_modern_installer: True
         system_vendor: "HPE"
         install_requirements: False
