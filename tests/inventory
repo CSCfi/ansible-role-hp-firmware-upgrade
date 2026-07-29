@@ -1,6 +1,6 @@
 testservers:
     children:
-#        hp_gen9:
+        hp_gen9:
         hpe_gen10:
 
 hp_gen9:
@@ -9,7 +9,7 @@ hp_gen9:
     vars:
         gen: "gen9"
         system_vendor: "HP"
-        install_requirements: True
+        install_requirements: False
         use_modern_installer: False
 
 hpe_gen10:
